@@ -111,9 +111,10 @@ public:
 		cout << "People的无参构造函数调用" << endl;
 	}
 	// 有参构造
-	People(int a)
+	People(int a, int height)
 	{
 		m_age = a;
+		m_height = new int(height);
 		cout << "People的有参构造函数调用" << endl;
 	}
 
@@ -121,17 +122,151 @@ public:
 	People(const People& p)
 	{
 		m_age = p.m_age;
+		//m_height = p.m_height; // 浅拷贝，编译器默认实现就是这行代码
+		m_height = new int(*p.m_height); // 深拷贝
 		cout << "People的拷贝构造函数调用" << endl;
 	}
-	~People();
+	
+	// 析构函数
+	~People()
+	{
+		if (m_height != nullptr)
+		{
+			delete m_height;
+			m_height = nullptr;
+		}
+		cout << "People的析构函数调用" << endl;
+	}
 
-private:
+public:
 	int m_age;
+	int *m_height;
 };
 
+void test01()
+{
+	People p(18, 180);
+	People p1(p);
+}
+
+// 三种调用方式
 void test()
 {
+	// 括号法
+	People p1;     // 调用默认构造函数，不要加()，否则编译器会认为这是一个函数声明，不会认为是在创建对象
+	People p2(10); // 有参构造函数
+	People p3(p1); // 调用拷贝构造函数
 
+	// 显示法
+	People p4; // 调用默认构造函数，不要加()，否则编译器会认为这是一个函数声明，不会认为是在创建对象
+	People p5 = People(10); // 有参构造函数
+	People p6 = People(2); // 调用拷贝构造函数
+	People(10); // 匿名对象 特点：当前行执行结束后，系统会立即回收匿名对象
+	// 注意事项：不要利用拷贝构造函数初始化匿名对象，编译器会认为是对象声明，即： People(p3) == People p3;
+	People(p6);// 错误
+
+	// 隐式转换法
+	People p7 = 10; // 调用有参构造，相当于写了 People p7  = People(10)
+	People p8 = p7; // 调用拷贝构造
+}
+
+class Phone {
+public:
+	Phone(string name):m_phoneName(name)
+	{
+		cout << "Phone 构造哈数调用" << endl;
+	}
+
+public:
+	string m_phoneName;
+};
+
+class Person1
+{
+public:
+	// Phone m_phone = phone 隐式转换法
+	Person1(string name, string phone):m_name(name), m_phone(phone)
+	{
+		cout << "Person 构造函数调用" << endl;
+	}
+
+public:
+	string m_name;
+	Phone m_phone;
+};
+
+class A {
+public:
+	// 静态成员函数
+	static void func()
+	{
+		m_A = 100; // 正确 静态成员函数可以访问 静态成员变量
+		//m_B = 10;  // 错误 静态成员函数不可以访问 非静态成员变量，因为编译器无法区分m_B到底是哪个对象的属性
+		cout << "static void func 调用" << endl;
+	}
+
+private:
+	// 私有静态成员函数
+	static void func2()
+	{
+		cout << "static void func2 调用" << endl;
+	}
+
+public:
+	static int m_A; // 静态成员变量
+	int m_B; // 非静态成员变量
+
+private:
+	static int m_C;
+};
+
+int A::m_A = 0;
+int A::m_C = 0;
+
+void test2()
+{
+	// 1. 通过对象访问
+	A a;
+	a.func();
+	// 2. 通过类名访问
+	A::func();
+
+	//a.func2();  // 错误 类外访问不到私有静态成员函数
+	//A::func2(); // 错误 类外访问不到私有静态成员函数
+}
+
+class B {
+public:
+	void func() // 非静态成员函数 不属于类的对象
+	{
+	}
+
+public:
+	int m_a;        // 非静态成员变量 属于类的对象
+	static int m_b; // 静态成员变量 不属于类的对象
+};
+
+void test3()
+{
+	B b;
+	/*
+	空对象占用内存空间为1
+	C++编译器会给每个空对象也分配一个字节空间，是为了区分空对象占内存的位置
+	每个空对象也应该有一个独一无二的内存地址
+	*/
+	cout << "sizeof b = " << sizeof(b) << endl;
+}
+
+void test4()
+{
+	B b;
+	cout << "sizeof b = " << sizeof(b) << endl;
+}
+
+void test5()
+{
+	B b;
+	cout << "sizeof b = " << sizeof(b) << endl;
 }
 
 int main()

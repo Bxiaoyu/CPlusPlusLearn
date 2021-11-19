@@ -929,35 +929,448 @@ class Person
 
 #### 4.2.2 构造函数的分类及调用
 
+两种分类方式：
+
+* 按参数分为：有参构造和无参构造（默认构造）
+* 按类型分为：普通构造和拷贝构造
+
+三种调用方式：
+
+* 括号法
+* 显示法
+* 隐式转换法
+
+**注意事项：**
+
+* 调用默认构造函数，不要加()，即不要写成People p()，否则编译器会认为这是一个函数声明，不会认为是在创建对象
+* 不要利用拷贝构造函数初始化匿名对象，编译器会认为是对象声明，即： People(p3) == People p3;
+  	People(p6);// 错误
+
+示例：
+
+```c++
+class People
+{
+public:
+	// 默认构造
+	People()
+	{
+		cout << "People的无参构造函数调用" << endl;
+	}
+	// 有参构造
+	People(int a)
+	{
+		m_age = a;
+		cout << "People的有参构造函数调用" << endl;
+	}
+
+	// 拷贝构造函数
+	People(const People& p)
+	{
+		m_age = p.m_age;
+		cout << "People的拷贝构造函数调用" << endl;
+	}
+	~People();
+
+private:
+	int m_age;
+};
+
+// 三种调用方式
+void test()
+{
+	// 1.括号法
+	People p1;     // 调用默认构造函数，不要加()，否则编译器会认为这是一个函数声明，不会认为是在创建对象
+	People p2(10); // 有参构造函数
+	People p3(p1); // 调用拷贝构造函数
+
+	// 2.显示法
+	People p4; // 调用默认构造函数，不要加()，否则编译器会认为这是一个函数声明，不会认为是在创建对象
+	People p5 = People(10); // 有参构造函数
+	People p6 = People(2); // 调用拷贝构造函数
+	People(10); // 匿名对象 特点：当前行执行结束后，系统会立即回收匿名对象
+	// 注意事项：不要利用拷贝构造函数初始化匿名对象，编译器会认为是对象声明，即： People(p3) == People p3;
+	People(p6);// 错误
+
+	// 3.隐式转换法
+	People p7 = 10; // 调用有参构造，相当于写了 People p7  = People(10)
+	People p8 = p7; // 调用拷贝构造
+}
+```
+
 
 
 #### 4.2.3 拷贝构造函数调用时机
+
+C++中拷贝构造函数调用时机通常有3种情况：
+
+1. 使用一个已经创建完毕的对象来初始化一个新对象
+2. 值传递的方式给函数参数传值
+3. 以值方式返回局部对象
+
+
+
+示例：
+
+```c++
+class People
+{
+public:
+	// 默认构造
+	People()
+	{
+		cout << "People的无参构造函数调用" << endl;
+	}
+	// 有参构造
+	People(int a)
+	{
+		m_age = a;
+		cout << "People的有参构造函数调用" << endl;
+	}
+
+	// 拷贝构造函数
+	People(const People& p)
+	{
+		m_age = p.m_age;
+		cout << "People的拷贝构造函数调用" << endl;
+	}
+	~People();
+
+private:
+	int m_age;
+};
+
+// 值传递的方式给函数参数传值
+void func1(People p)
+{
+    cout << "hello" << endl;
+}
+
+// 以值方式返回局部对象
+People func2()
+{
+    People p;
+    return P;
+}
+
+void test()
+{
+    // 1.使用一个已经创建完毕的对象来初始化一个新对象
+    People p1;
+    People p2(p1);
+    // 2.值传递的方式给函数参数传值
+    func1(p1);
+    // 3.以值方式返回局部对象
+    People p3 = func2();
+}
+```
 
 
 
 #### 4.2.4 构造函数调用规则
 
+默认情况下，C++的编译器至少给一个类添加3哥函数
 
+1. 默认构造函数（无参，函数体为空）
+2. 默认析构函数（无参，函数体为空）
+3. 默认拷贝构造函数，对属性进行值拷贝
+
+构造函数调用规则如下：
+
+* 如果用户定义有参构造函数，C++不再提供默认无参构造函数，但是会提供默认拷贝构造
+* 如果用户定义拷贝构造函数，C++不会再提供其它构造函数（默认的几个构造函数）
 
 #### 4.2.5 深拷贝与浅拷贝
+
+浅拷贝：简单的赋值拷贝操作
+
+深拷贝：在堆区重新申请空间，进行拷贝操作
+
+示例：
+
+```c++
+class People
+{
+public:
+	// 默认构造
+	People()
+	{
+		cout << "People的无参构造函数调用" << endl;
+	}
+	// 有参构造
+	People(int a, int height)
+	{
+		m_age = a;
+		m_height = new int(height);
+		cout << "People的有参构造函数调用" << endl;
+	}
+
+	// 拷贝构造函数
+	People(const People& p)
+	{
+		m_age = p.m_age;
+		//m_height = p.m_height; // 浅拷贝，编译器默认实现就是这行代码
+		m_height = new int(*p.m_height); // 深拷贝
+		cout << "People的拷贝构造函数调用" << endl;
+	}
+	
+	// 析构函数
+	~People()
+	{
+		if (m_height != nullptr)
+		{
+			delete m_height;
+			m_height = nullptr;
+		}
+		cout << "People的析构函数调用" << endl;
+	}
+
+public:
+	int m_age;
+	int *m_height;
+};
+
+void test01()
+{
+	People p(18, 180);
+	People p1(p);
+}
+```
 
 
 
 #### 4.2.6 初始化列表
 
+**作用：**
+
+C++提供了初始化列表语法，用来初始化属性
+
+**语法：** `构造函数()：属性1(值1)，属性2(值2)...{}`
+
+
+
+示例：
+
+```c++
+class Person
+{
+ public:
+    // 列表初始化
+    Person(int a, int b):m_a(a),m_b(b)
+    {
+        
+    }
+    
+ private:
+    int m_a;
+    int m_b;
+};
+```
+
 
 
 #### 4.2.7 类对象作为类成员
+
+C++类中的成员可以是另一个的对象，称该成员为 `对象成员`
+
+**注意：**当其它类对象作为本类的成员，构造时先构造类对象，再构造自生。析构相反。
+
+示例：
+
+```c++
+class Phone {
+public:
+	Phone(string name):m_phoneName(name)
+	{
+		cout << "Phone 构造哈数调用" << endl;
+	}
+
+public:
+	string m_phoneName;
+};
+
+class Person
+{
+public:
+	// Phone m_phone = phone 隐式转换法
+	Person(string name, string phone):m_name(name), m_phone(phone)
+	{
+		cout << "Person 构造函数调用" << endl;
+	}
+
+public:
+	string m_name;
+	Phone m_phone; // 当其它类对象作为本类的成员，构造时先构造类对象，再构造自生。析构相反。
+};
+```
 
 
 
 #### 4.2.8 静态成员
 
+静态成员就是在成员变量和成员函数前加上`static`关键字，称为静态成员
+
+静态成员分为：
+
+**1. 静态成员变量**
+
+* 所有对象共享同一份数据
+* 在编译阶段分配内存
+* 类内声明，类外初始化
+
+**2. 静态成员函数**
+
+特点：
+
+* 所有对象共享同一个函数
+* `静态成员函数只能访问静态成员变量`
+
+调用方式：
+
+* 通过对象调用（例如：Person p; p.test();）
+* 通过类名调用（例如：Person::test();）
+
+
+
+**示例：**
+
+```c++
+class A {
+public:
+	// 静态成员函数
+	static void func()
+	{
+		m_A = 100; // 正确 静态成员函数可以访问 静态成员变量
+		//m_B = 10;  // 错误 静态成员函数不可以访问 非静态成员变量，因为编译器无法区分m_B到底是哪个对象的属性
+		cout << "static void func 调用" << endl;
+	}
+
+private:
+	// 私有静态成员函数
+	static void func2()
+	{
+		cout << "static void func2 调用" << endl;
+	}
+
+public:
+	static int m_A; // 静态成员变量
+	int m_B; // 非静态成员变量
+};
+
+int A::m_A = 0; // 静态成员变量类外初始化
+int A::m_C = 0; // 静态成员变量类外初始化
+
+void test2()
+{
+	// 1. 通过对象访问
+	A a;
+	a.func();
+	// 2. 通过类名访问
+	A::func();
+    
+	//a.m_C;   // 错误 类外访问不到私有静态成员
+	//A::m_C;  // 错误 类外访问不到私有静态成员
+	//a.func2();  // 错误 类外访问不到私有静态成员函数
+	//A::func2(); // 错误 类外访问不到私有静态成员函数
+}
+```
+
 
 
 ### 4.3 C++对象模型和this指针
 
+#### 4.3.1 成员变量和成员函数分开存储
 
+在C++中，类内的成员变量和成员函数分开存储
+
+只有`非静态成员变量`才属于类的对象上，即`非静态成员函数，静态成员变量，静态成员函数`都不属于类的对象
+
+
+
+**注意：**
+
+`空对象占用内存空间为1`，C++编译器会给每个空对象也分配一个字节空间，是为了区分空对象占内存的位置，每个空对象也应该有一个独一无二的内存地址
+
+
+
+示例：
+
+```c++
+class B {
+};
+
+void test3()
+{
+	B b;
+	/*
+	空对象占用内存空间为1
+	C++编译器会给每个空对象也分配一个字节空间，是为了区分空对象占内存的位置
+	每个空对象也应该有一个独一无二的内存地址
+	*/
+	cout << "sizeof b = " << sizeof(b) << endl;
+}
+
+class B {
+public:
+	int m_a;        // 非静态成员变量 属于类的对象
+};
+
+void test4()
+{
+	B b;
+	cout << "sizeof b = " << sizeof(b) << endl;
+}
+
+class B {
+public:
+	void func() // 非静态成员函数 不属于类的对象
+	{
+	}
+    
+    static void func2() // 静态成员函数 不属于类的对象
+	{
+	}
+
+public:
+	int m_a;        // 非静态成员变量 属于类的对象
+	static int m_b; // 静态成员变量 不属于类的对象
+};
+
+void test5()
+{
+	B b;
+	cout << "sizeof b = " << sizeof(b) << endl;
+}
+
+结果：
+sizeof b = 1
+sizeof b = 4
+sizeof b = 4
+```
+
+
+
+#### 4.3.2 this指针概念
+
+因为C++中成员变量和成员函数是分开存储的，每一个非静态成员函数只会产生一份函数实例，也就是多个同类型的对象共用一块代码。
+
+那么问题是：这一块代码是如何区分哪个对象调用自己的呢？
+
+C++通过提供特殊的对象指针，this指针，解决上述问题，`this指针指向被调用的成员函数所属的对象`。
+
+* this指针是隐含于每一个非静态成员函数内的一种指针
+* this指针不需要定义，直接使用即可
+
+**this指针的用途：**
+
+* 当形参和成员变量同名时，可以用this指针来区分
+* 在类的非静态成员函数中返回对象本身，可以使用 return *this
+
+#### 4.3.3 空指针访问成员函数
+
+
+
+#### 4.3.4 const修饰成员函数
 
 ### 4.4 友元
 
