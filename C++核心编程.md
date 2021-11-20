@@ -1669,15 +1669,226 @@ void test()
 
 **作用：**实现两个自定义数据类型相加运算
 
+
+
+示例：
+
+```c++
+class Person {
+public:
+	// 成员函数重载+号运算符
+	Person operator+(Person& p)
+	{
+		Person temp;
+		temp.m_A = this->m_A + p.m_A;
+		temp.m_B = this->m_B + p.m_B;
+		return temp;
+	}
+public:
+	int m_A;
+	int m_B;
+};
+
+// 全局函数重载+号运算符
+Person operator+(Person& p1, Person& p2)
+{
+	Person temp;
+	temp.m_A = p1.m_A + p2.m_A;
+	temp.m_B = p1.m_B + p2.m_B;
+	return temp;
+}
+
+// 函数重载（运算符重载也可以发生函数重载）
+Person operator+(Person& p, int num)
+{
+	Person temp;
+	temp.m_A = p.m_A + num;
+	temp.m_B = p.m_B + num;
+	return temp;
+}
+
+void test()
+{
+	Person p1;
+	p1.m_A = 10;
+	p1.m_B = 10;
+	Person p2;
+	p2.m_A = 10;
+	p2.m_B = 10;
+
+	// 成员函数重载本质调用
+	Person p3 = p1.operator+(p2);
+
+	// 全局函数重载本质调用
+	Person p4 = p1.operator+(p2);
+
+	// 简化写法
+	Person p5 = p1 + p2;
+
+	Person p6 = p1 + 10;
+}
+```
+
+**总结：**
+
+* 对于内置数据类型的表达式的运算符是不能改变的
+* 不要滥用运算符重载
+
 #### 4.5.2 左移运算符重载
 
+**作用：**可以输出自定义数据类型
 
+**注意：**
+
+* 不会利用成员函数重载 << 运算符，因为无法实现 cout 在左侧，即（p << cout）
+* 只能利用全局函数重载左移运算符
+
+示例：
+
+```c++
+class Person {
+	friend ostream& operator << (ostream& out, Person& p);
+public:
+	Person(int a, int b):m_A(a),m_B(b)
+	{
+	}
+
+private:
+	int m_A;
+	int m_B;
+};
+
+// 只能用全局函数来重载左移运算符，ostream对象只能有一个，所以只能用引用调用
+// 返回引用，支持链式调用
+ostream& operator << (ostream& out, Person& p)
+{
+	out << "m_A = " << p.m_A << " m_B = " << p.m_B;
+	return out;
+}
+
+int main()
+{
+	Person p(10, 10);
+	cout << p << " hello world" << endl; // 链式调用
+}
+
+结果：
+m_A = 10 m_B = 10 hello world
+```
+
+**总结：**
+
+重载左移运算符配合友元可以实现输出自定义数据类型
 
 #### 4.5.3 递增运算符重载
 
+**作用：**通过重载递增运算符，实现自己的整型数据
 
+**前置++**：`MyInteger& operator++()`
+
+**后置++**：`MyInteger operator++(int)` // int代表占位参数，可以用于区分前置和后置递增
+
+示例：
+
+```c++
+class MyInteger {
+	friend ostream& operator<<(ostream& out, MyInteger mi);
+public:
+	MyInteger()
+	{
+		m_num = 0;
+	}
+
+	// 重载前置++运算符，前置递增返回引用
+	// 返回引用是为了一直对一个数据进行递增操作
+	MyInteger& operator++()
+	{
+		// 先进行++运算
+		m_num++;
+		// 再将自身做返回
+		return *this;
+	}
+
+	// 重载后置++运算符，后置递增返回值
+	// void operator++(int) int代表占位参数，可以用于区分前置和后置递增
+	MyInteger operator++(int)
+	{
+		// 先记录当时结果
+		MyInteger temp = *this;
+		//后递增
+		m_num++;
+		// 最后将记录结果返回
+		return temp;
+	}
+private:
+	int m_num;
+};
+
+// 重载<<运算符
+ostream& operator<<(ostream& out, MyInteger mi)
+{
+	out << mi.m_num;
+	return out;
+}
+
+// 测试前置++
+void test01()
+{
+	MyInteger mi;
+	cout << "前置++" << endl;
+	cout << ++(++mi) << endl;
+	cout << mi << endl;
+}
+
+// 测试后置++
+void test02()
+{
+	MyInteger mi;
+	cout << "后置++" << endl;
+	cout << mi++ << endl;
+	cout << mi << endl;
+}
+
+int main()
+{
+	test01();
+	test02();
+
+	return 0;
+}
+结果：
+前置++
+2
+2
+后置++
+0
+1
+
+```
+
+**总结：**
+
+* 前置递增返回引用
+* 后置递增返回值
 
 #### 4.5.4 赋值运算符重载
+
+C++编译器至少给一个类添加4个函数
+
+1. 默认构造函数（无参，函数体为空）
+2. 默认析构函数（无参，函数体为空）
+3. 默认拷贝构造函数，对属性进行值拷贝
+4. 赋值运算符 operator= 对属性进行值拷贝
+
+如果类中有属性指向堆区，做赋值操作时也会出现深浅拷贝的问题
+
+
+
+示例：
+
+```c++
+
+```
 
 
 
