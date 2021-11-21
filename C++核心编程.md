@@ -2390,18 +2390,478 @@ Base析构函数！
 
 #### 4.6.5 继承同名成员处理方式
 
+问题：当子类和父类出现同名的成员，如何通过子类对象，访问到子类或父类中同名的数据呢？
 
+* 访问子类同名成员，直接访问即可
+* 访问父类同名成员，需要加作用域
+
+示例：
+
+```c++
+class Base {
+public:
+	Base()
+	{
+		m_A = 100;
+	}
+
+	void func()
+	{
+		cout << "Base - func() 调用" << endl;
+	}
+
+	void func(int a)
+	{
+		cout << "Base - func(int a) 调用" << endl;
+	}
+
+public:
+	int m_A;
+};
+
+class Son :public Base {
+public:
+	Son()
+	{
+		m_A = 200;
+	}
+
+	void func()
+	{
+		cout << "Son - func() 调用" << endl;
+	}
+
+public:
+	int m_A;
+};
+
+void test01()
+{
+	Son s;
+	cout << "Son 的 m_A = " << s.m_A << endl;
+	cout << "Base 的 m_A = " << s.Base::m_A << endl;
+
+	s.func(); // 直接调用，调用的是子类中的同名成员
+	s.Base::func(); // 加作用域调用父类中的同名成员
+
+	// 如果子类中出现和父类同名的成员函数，子类的同名成员会隐藏掉父类中所有同名成员函数
+	// 如果想访问到父类中被隐藏的同名成员函数，需要加作用域
+	//s.func(100); // 错误
+	s.Base::func(100);
+}
+
+int main()
+{
+	test01();
+	return 0;
+}
+
+结果：
+Son 的 m_A = 200
+Base 的 m_A = 100
+Son - func() 调用
+Base - func() 调用
+Base - func(int a) 调用
+```
+
+**总结：**
+
+1. 子类对象可以直接访问到子类中的同名成员
+2. 子类对象加作用域可以访问到父类同名成员
+3. 当子类与父类拥有同名的成员函数，子类会隐藏父类中同名成员函数，加作用域可以访问到父类中的同名函数
 
 #### 4.6.6 继承同名静态成员处理方式
+
+问题：继承中同名的静态成员在子类对象上如何进行访问？
+
+静态成员和非静态成员出现同名，处理方式一致：
+
+* 访问子类同名成员，直接访问即可
+* 访问父类同名成员，需要加作用域
+
+
+
+示例：
+
+```c++
+// 继承中的同名静态成员处理方式
+class Base {
+public:
+	static void func()
+	{
+		cout << "Base -- static void func()" << endl;
+	}
+
+	static void func(int a)
+	{
+		cout << "Base -- static void func(int a)" << endl;
+	}
+public:
+	static int m_A;
+};
+
+int Base::m_A = 100;
+
+
+class Son :public Base {
+public:
+	static void func()
+	{
+		cout << "Son -- static void func()" << endl;
+	}
+public:
+	static int m_A;
+};
+
+int Son::m_A = 200;
+
+// 同名静态成员属性
+void test_static_member()
+{
+	// 1.通过对象访问
+	Son s;
+	cout << "通过对象访问：" << endl;
+	cout << "Son 下 m_A = " << s.m_A << endl;
+	cout << "Base 下 m_A = " << s.Base::m_A << endl;
+
+	// 2.通过类名访问
+	cout << "通过类名访问：" << endl;
+	cout << "Son 下 m_A = " << Son::m_A << endl;
+	// 第一个::代表通过类名的方式访问，第二个::代表访问父类作用域下的数据
+	cout << "Base 下 m_A = " << Son::Base::m_A << endl;
+}
+
+// 同名静态成员函数
+void test_static_func()
+{
+	// 1.通过对象访问
+	Son s;
+	s.func();
+	s.Base::func();
+
+	// 2.通过类名访问
+	Son::func();
+	Son::Base::func();
+	// 子类出现和父类同名的静态成员函数，也会隐藏父类中的所有同名成员函数
+	// 如果想访问父类中被隐藏的同名成员函数，需要加作用域
+	Son::Base::func(100);
+}
+
+int main()
+{
+	test_static_member();
+	cout << endl;
+	test_static_func();
+	return 0;
+}
+
+结果：
+通过对象访问：
+Son 下 m_A = 200
+Base 下 m_A = 100
+通过类名访问：
+Son 下 m_A = 200
+Base 下 m_A = 100
+
+Son -- static void func()
+Base -- static void func()
+Son -- static void func()
+Base -- static void func()
+Base -- static void func(int a)
+```
 
 
 
 #### 4.6.7 多继承语法
 
+C++允许`一个类继承多个类`
 
+语法：`class 子类 : 继承方式 父类1，继承方式 父类2...`
+
+多继承可能会引发父类中有同名成员出现，需要加作用域区分
+
+**C++实际开发中不建议使用多继承**
+
+
+
+示例：
+
+```c++
+// 多继承语法
+class Base1 {
+public:
+	Base1()
+	{
+		m_A = 100;
+	}
+public:
+	int m_A;
+};
+
+class Base2 {
+public:
+	Base2()
+	{
+		m_A = 200;
+	}
+
+public:
+	int m_A;
+};
+
+// 子类，需要继承Base1和Base2
+class Son :public Base1, public Base2 {
+public:
+	Son()
+	{
+		m_C = 300;
+		m_D = 400;
+	}
+
+public:
+	int m_C;
+	int m_D;
+};
+
+// 测试多继承
+void test_multiple_inheritance()
+{
+	Son s;
+	cout << "sizeof Son: " << sizeof(s) << endl;
+	// 当父类中出现同名成员，需要加作用域区分
+
+	cout << "Base1--m_A = " << s.Base1::m_A << endl;
+	cout << "Base2--m_A = " << s.Base2::m_A << endl;
+}
+
+int main()
+{
+	test_multiple_inheritance();
+	return 0;
+}
+
+结果：
+sizeof Son: 16
+Base1--m_A = 100
+Base2--m_A = 200
+```
+
+**总结：**多继承如果父类中出现同名情况，子类使用时候要加作用域。
 
 #### 4.6.8 菱形继承
+
+**菱形继承概念：**
+
+* 两个派生类继承同一个基类
+* 又有某个类同时继承两个派生类
+
+这种继承被称为菱形继承，或者钻石继承
+
+
+
+**典型的菱形继承案例：**
+
+![图6](./images/mutil_jc.png)
+
+**菱形继承问题：**
+
+1. 羊继承了动物的数据，驼同样继承了动物的数据，当草泥马使用数据时，就会产生二义性。
+2. 草泥马继承自动物的数据继承了两份，其实我们清楚，这些数据只需要一份交就行了。
+
+
+
+**解决方法：**
+
+利用`虚继承`，可以解决菱形继承的问题，在继承之前，加上关键字 `virtual` 变为虚继承。
+
+
+
+示例：
+
+```c++
+// 菱形继承
+// 动物类
+class Animal {
+public:
+	int m_Age;
+};
+
+// 利用虚继承，可以解决菱形继承的问题
+// 在继承之前，加上关键字 virtual 变为虚继承，则Animal类变为虚基类
+// 羊类
+class Sheep :virtual public Animal {
+
+};
+
+// 驼类
+class Camel :virtual public Animal {
+
+};
+
+// 羊驼类
+class Alpaca :public Sheep, public Camel {
+
+};
+
+void test_diamond_inheritance()
+{
+	Alpaca ap;
+	// 当菱形继承，两个父类拥有相同数据，需要加以作用域区分
+	ap.Sheep::m_Age = 18;
+	ap.Camel::m_Age = 28;
+	cout << "ap.Sheep::m_Age = " << ap.Sheep::m_Age << endl;
+	cout << "ap.Camel::m_Age = " << ap.Camel::m_Age << endl;
+
+	// 这些数据只要有一份就可以，菱形继承导致数据有两份，浪费资源
+	// 解决菱形继承后
+	cout << ap.m_Age << endl; // 数据只有一份了，就不会出现对象不明确问题
+}
+
+int main()
+{
+	test_diamond_inheritance();
+	return 0;
+}
+
+结果：
+ap.Sheep::m_Age = 28
+ap.Camel::m_Age = 28
+28
+```
+
+**代码中对象模型分析：**
+
+产生菱形继承时的对象模型：
+
+![图7](./images/mutil_jc_model1.png)
+
+解决菱形继承后的对象模型：
+
+![图8](./images/vbtable.png)
+
+**总结：**
+
+* 菱形继承带来的主要问题是子类继承两份相同的数据，导致资源浪费，毫无意义
+* 利用虚继承可以解决菱形继承问题
 
 
 
 ### 4.7 多态
+
+#### 4.7.1 多态的基本概念
+
+**多态是C++面向对象的三大特性之一**
+
+多态分为两类：
+
+1. 静态多态：`函数重载` 和 `运算符重载` 属于静态多态，复用函数名
+2. 动态多态：`派生类` 和 `虚函数`实现运行时多态
+
+**静态多态和动态多态区别：**
+
+* 静态多态的函数地址早绑定----编译阶段确定函数地址
+* 动态多态的函数地址晚绑定----运行阶段确定函数地址
+
+
+
+**动态多态满足条件：**
+
+1. 有继承关系
+
+2. 子类重写父类的虚函数
+
+**动态多态使用：**
+
+* 父类的指针或者引用指向子类对象
+
+
+
+示例：
+
+```c++
+// 动物类
+class Animal {
+public:
+	// 虚函数
+	virtual void speak()
+	{
+		cout << "动物在说话" << endl;
+	}
+};
+
+// 猫类
+class Cat :public Animal {
+public:
+	// 重写 函数返回类型 函数名 参数列表 完全相同
+	void speak()
+	{
+		cout << "猫在说话" << endl;
+	}
+};
+
+// 狗类
+class Dog :public Animal {
+public:
+	void speak()
+	{
+		cout << "狗在说话" << endl;
+	}
+};
+
+// 执行说话的函数
+// 地址早绑定，在编译阶段确定函数地址
+// 如果想执行让猫说话，那么这个函数地址要在运行阶段绑定，地址晚绑定
+
+/*
+* 动态多态满足条件：
+* 1. 有继承关系
+* 2. 子类重写父类的虚函数
+* 
+* 动态多态使用：
+* 父类的指针或者引用指向子类对象
+*/
+void doSpeak(Animal& animal)
+{
+	animal.speak();
+}
+
+// 测试函数
+void test()
+{
+	Cat cat;
+	doSpeak(cat);
+
+	Dog dog;
+	doSpeak(dog);
+}
+
+int main()
+{
+	test();
+	return 0;
+}
+
+结果：
+猫在说话
+狗在说话
+```
+
+> 重写：函数返回值类型，函数名，参数列表 完全一致称为重写
+
+#### 4.7.2 多态案例1-计算器类
+
+
+
+#### 4.7.3 纯虚函数和抽象类
+
+
+
+#### 4.7.4 多态案例2-制作饮品
+
+
+
+#### 4.7.5 虚析构和纯虚析构
+
+
+
+#### 4.7.6 多态案例3-电脑组装

@@ -27,5 +27,17 @@
     <ClCompile Include="继承中的构造和析构顺序.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="继承中的同名成员处理.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="继承中的同名静态成员处理方法.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="多继承语法.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="菱形继承.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
