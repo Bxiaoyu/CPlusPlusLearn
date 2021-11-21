@@ -24,5 +24,14 @@
     <ClCompile Include="重载递增运算符.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="赋值运算符重载.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="关系运算符重载.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="函数调用运算符重载.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

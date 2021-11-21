@@ -1788,6 +1788,8 @@ m_A = 10 m_B = 10 hello world
 
 **后置++**：`MyInteger operator++(int)` // int代表占位参数，可以用于区分前置和后置递增
 
+前置和后置--的实现与++一致，改符号即可
+
 示例：
 
 ```c++
@@ -1887,20 +1889,229 @@ C++编译器至少给一个类添加4个函数
 示例：
 
 ```c++
+class Person {
+public:
+	Person(int age)
+	{
+		m_age = new int(age);
+	}
 
+	~Person()
+	{
+		if (m_age != nullptr)
+		{
+			delete m_age;
+			m_age = nullptr;
+		}
+	}
+
+	// 重载赋值运算符
+	Person& operator=(Person& p)
+	{
+		// 编译器是提供浅拷贝
+		//m_age = p.m_age;
+
+		// 应该先判断是否有属性在堆区，如果有先释放干净，然后再深拷贝
+		if (m_age != nullptr)
+		{
+			delete m_age;
+			m_age = nullptr;
+		}
+
+		// 深拷贝
+		m_age = new int(*p.m_age);
+
+		// 返回对象本身
+		return *this;
+	}
+
+public:
+	int* m_age;
+};
+
+int main()
+{
+	Person p1(18);
+	Person p2(20);
+	Person p3(25);
+
+	p3 = p2 = p1; // 赋值操作，链式调用
+
+	cout << "p1的年龄为：" << *p1.m_age << endl;
+	cout << "p2的年龄为：" << *p2.m_age << endl;
+	cout << "p3的年龄为：" << *p3.m_age << endl;
+
+	return 0;
+}
+
+结果：
+p1的年龄为：18
+p2的年龄为：18
+p3的年龄为：18
 ```
 
 
 
 #### 4.5.5 关系运算符重载
 
+**作用：**重载关系运算符，可以让两个自定义类型对象进行对比操作
+
+这里演示 == 和 != 运算符，其它的实现类似
+
+示例：
+
+```c++
+class Person {
+public:
+	Person(string name, int age):m_name(name),m_age(age)
+	{}
+
+	// 重载 == 运算符
+	bool operator==(Person& p)
+	{
+		if (this->m_name == p.m_name && this->m_age == p.m_age)
+		{
+			return true;
+		}
+		return false;
+	}
+
+	// 重载 != 运算符
+	bool operator!=(Person& p)
+	{
+		if (this->m_name == p.m_name && this->m_age == p.m_age)
+		{
+			return false;
+		}
+		return true;
+	}
+
+public:
+	string m_name;
+	int m_age;
+};
+
+int main()
+{
+	Person p1("Tom", 18);
+	Person p2("Tom", 18);
+
+	if (p1 == p2)
+	{
+		cout << "p1 和 p2是相等的!" << endl;
+	}
+
+	Person p3("Jack", 18);
+	if (p1 != p3)
+	{
+		cout << "p1 和 p3不相等!" << endl;
+	}
+
+	return 0;
+}
+
+结果：
+p1 和 p2是相等的!
+p1 和 p3不相等!
+```
+
 
 
 #### 4.5.6 函数调用运算符重载
 
+* 函数调用运算符（）也可以重载
+* 由于重载后使用的方式非常像函数的调用，因此称为`仿函数`
+* 仿函数没有固定写法，非常灵活
+
+示例：
+
+```c++
+// 打印类
+class MyPrint {
+public:
+	// 重载函数调用运算符，也称仿函数
+	void operator()(string text)
+	{
+		cout << text << endl;
+	}
+};
+
+// 仿函数非常灵活，没有固定写法
+// 加法类
+class MyAdd {
+public:
+	int operator()(int num1, int num2)
+	{
+		return num1 + num2;
+	}
+};
+
+int main()
+{
+	MyPrint mp;
+	mp("hello world!");
+
+	MyAdd md;
+	int ret = md(100, 100);
+	cout << "MyAdd result: " << ret << endl;
+
+	// 匿名函数对象
+	cout << "MyAdd()(100,100): " << MyAdd()(100, 100) << endl;
+
+	return 0;
+}
+
+结果：
+hello world!
+MyAdd result: 200
+MyAdd()(100,100): 200
+```
+
 
 
 ### 4.6 继承
+
+**继承是面向对象三大特性之一**
+
+有些类与类之间存在特殊关系，例如下图中：
+
+![图2](./images/jicheng.png)
+
+可以发现，定义这些类时，下级别的成员除了拥有上一级的共性，还有自己的特性。
+
+这个时候就可以利用继承的技术，减少重复的代码。
+
+
+
+#### 4.6.1 继承的基本语法
+
+
+
+#### 4.6.2 继承方式
+
+
+
+#### 4.6.3 继承中的对象模型
+
+
+
+#### 4.6.4 继承中构造和析构顺序
+
+
+
+#### 4.6.5 继承同名成员处理方式
+
+
+
+#### 4.6.6 继承同名静态成员处理方式
+
+
+
+#### 4.6.7 多继承语法
+
+
+
+#### 4.6.8 菱形继承
 
 
 

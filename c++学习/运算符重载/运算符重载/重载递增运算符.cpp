@@ -60,10 +60,10 @@ void test02()
 	cout << mi << endl;
 }
 
-int main()
-{
-	test01();
-	test02();
-
-	return 0;
-}
+//int main()
+//{
+//	test01();
+//	test02();
+//
+//	return 0;
+//}

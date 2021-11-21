@@ -123,8 +123,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="关系运算符重载.cpp" />
+    <ClCompile Include="函数调用运算符重载.cpp" />
     <ClCompile Include="加号运算符重载.cpp" />
     <ClCompile Include="左移运算符重载.cpp" />
+    <ClCompile Include="赋值运算符重载.cpp" />
     <ClCompile Include="重载递增运算符.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
