@@ -29,3 +29,47 @@ public:
 		cout << "Java学科视频" << endl;
 	}
 };
+
+// Python页面
+class Python :public BasePage {
+public:
+	void center()
+	{
+		cout << "Python学科视频" << endl;
+	}
+};
+
+// c++页面
+class Cpp :public BasePage {
+public:
+	void center()
+	{
+		cout << "C++学科视频" << endl;
+	}
+};
+
+//int main()
+//{
+//	cout << "java页面" << endl;
+//	Java ja;
+//	ja.header();
+//	ja.left();
+//	ja.center();
+//	ja.footer();
+//
+//	cout << "Python页面" << endl;
+//	Python py;
+//	py.header();
+//	py.left();
+//	py.center();
+//	py.footer();
+//
+//	cout << "C++页面" << endl;
+//	Cpp cp;
+//	cp.header();
+//	cp.left();
+//	cp.center();
+//	cp.footer();
+//
+//	return 0;
+//}

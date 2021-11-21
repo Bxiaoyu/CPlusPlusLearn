@@ -18,5 +18,14 @@
     <ClCompile Include="继承基本语法.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="继承方式.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="继承中的对象模型.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="继承中的构造和析构顺序.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

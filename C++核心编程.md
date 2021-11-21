@@ -2085,19 +2085,308 @@ MyAdd()(100,100): 200
 
 #### 4.6.1 继承的基本语法
 
+```c++
+// 公共页面类
+class BasePage {
+public:
+	void header()
+	{
+		cout << "首页，公开课，登录，注册...(公共头部)" << endl;
+	}
 
+	void footer()
+	{
+		cout << "帮助中心，交流合作，站内地图...(公共底部)" << endl;
+	}
+
+	void left()
+	{
+		cout << "Java，Python，C++，...(公共分类列表)" << endl;
+	}
+};
+
+// Java页面
+class Java :public BasePage {
+public:
+	void center()
+	{
+		cout << "Java学科视频" << endl;
+	}
+};
+
+// Python页面
+class Python :public BasePage {
+public:
+	void center()
+	{
+		cout << "Python学科视频" << endl;
+	}
+};
+
+// c++页面
+class Cpp :public BasePage {
+public:
+	void center()
+	{
+		cout << "C++学科视频" << endl;
+	}
+};
+
+int main()
+{
+	cout << "java页面" << endl;
+	Java ja;
+	ja.header();
+	ja.left();
+	ja.center();
+	ja.footer();
+
+	cout << "Python页面" << endl;
+	Python py;
+	py.header();
+	py.left();
+	py.center();
+	py.footer();
+
+	cout << "C++页面" << endl;
+	Cpp cp;
+	cp.header();
+	cp.left();
+	cp.center();
+	cp.footer();
+
+	return 0;
+}
+```
+
+
+
+**总结：**
+
+继承的好处：`可以减少重复的代码`
+
+class A : public B;
+
+A类称为子类或派生类
+
+B类称为父类或基类
+
+**派生类中的成员，包含两大部分：**
+
+* 一类是从基类继承过来的
+* 一类是自己增加的成员
+
+从基类继承过来的表现其共性，而新增的成员体现其个性。
 
 #### 4.6.2 继承方式
+
+继承的语法：`class 子类 : 继承方式 父类`
+
+**继承方式一共有三种：**
+
+* 公共继承（public）
+* 保护继承（protected）
+* 私有继承（private）
+
+示图：
+
+![图3](./images/submethod.png)
+
+示例：
+
+```c++
+class Base {
+public:
+	int m_a;
+protected:
+	int m_b;
+private:
+	int m_c;
+};
+
+// 公共继承
+class Son1 :public Base {
+public:
+	void func()
+	{
+		m_a = 10; // 父类中的公共权限成员，到子类中依然是 公共权限
+		m_b = 10; // 父类中的保护权限成员，到子类中依然是 保护权限
+		//m_c = 10; // 父类中的私有权限成员，子类中访问不到
+	}
+};
+
+void test01()
+{
+	Son1 s;
+	s.m_a = 100;
+	//s.m_b = 100; // 到Son1中，m_b是保护权限，类外访问不到
+}
+
+// 保护继承
+class Son2 :protected Base {
+public:
+	void func()
+	{
+		m_a = 10; // 父类中的公共权限成员，到子类中变为 保护权限
+		m_b = 10; // 父类中的保护权限成员，到子类中变为 保护权限
+		//m_c = 10; // 父类中的私有权限成员，子类中访问不到
+	}
+};
+
+void test02()
+{
+	Son2 s;
+	//s.m_a = 100; // 在Son2中，m_a变为保护权限，类外不可访问
+	//s.m_b = 100; // 在Son2中，m_b变为保护权限，类外不可访问
+}
+
+// 私有继承
+class Son3 :private Base {
+public:
+	void func()
+	{
+		m_a = 100; // 父类中公共成员，到子类中变为 私有成员
+		m_b = 100; // 父类中保护成员，到子类中变为 私有成员
+		//m_c = 100; // 父类中的私有权限成员，子类中访问不到
+	}
+};
+
+// Son3的儿子类
+class GrandSon :public Son3 {
+public:
+	void func()
+	{
+		//m_a = 1000; // 到了Son3中，m_a变为私有，即使是儿子，也访问不到
+		//m_b = 1000; // 到了Son3中，m_b变为私有，即使是儿子，也访问不到
+	}
+};
+
+void test03()
+{
+	Son3 s;
+	//s.m_a = 1000; // 在Son3中，m_a变为私有成员，类外访问不到
+	//s.m_b = 1000; // 在Son3中，m_B变为私有成员，类外访问不到
+	//s.m_c = 1000; // 父类中的私有权限成员，子类中访问不到
+}
+```
 
 
 
 #### 4.6.3 继承中的对象模型
 
+**问题：**从父类继承过来的成员，哪些属于子类对象？
 
+
+
+示例：
+
+```c++
+// 继承中的对象模型
+class Base {
+public:
+	int m_a;
+protected:
+	int m_b;
+private:
+	int m_c; // 私有成员只是被编译器隐藏了，但是会被继承下去
+};
+
+// 公共继承
+class Son :public Base {
+public:
+	int m_d;
+};
+
+// 利用开发人员命令提示工具查看对象模型
+// 跳转盘符 F：
+// 跳转文件路径 cd 具体路径
+// 查看命名
+// cl /d1 reportSingleClassLayout类名 文件名
+
+void test()
+{
+	// 父类中所有非静态成员属性都会被子类继承下去
+	// 父类中私有成员属性 是被编译器给隐藏了，因此是访问不到的，但是确实被继承下来了
+	cout << "size of Son = " << sizeof(Son) << endl;
+}
+
+ 结果：
+ size of Son = 16
+```
+
+
+
+利用工具查看：
+
+![图4](./images/vs1.png)
+
+打开工具窗口后，定位到当前cpp文件所在的盘符
+
+然后输入：`cl /d1 reportSingleClassLayout类名 文件名.cpp`
+
+效果图如下：
+
+![图5](./images/vs2.png)
+
+> 结论：父类中私有成员也是被子类继承下去了，只是由编译器给隐藏后访问不到
 
 #### 4.6.4 继承中构造和析构顺序
 
+子类继承父类后，当创建子类对象，也会调用父类的构造函数
 
+问题：父类和子类的构造和析构顺序谁先谁后？
+
+示例：
+
+```c++
+class Base {
+public:
+	Base()
+	{
+		cout << "Base构造函数！" << endl;
+	}
+
+	~Base()
+	{
+		cout << "Base析构函数！" << endl;
+	}
+};
+
+class Son :public Base {
+public:
+	Son()
+	{
+		cout << "Son构造函数！" << endl;
+	}
+
+	~Son()
+	{
+		cout << "Son析构函数！" << endl;
+	}
+};
+
+void test()
+{
+	// 继承中的构造和析构顺序如下：
+	// 先构造父类，再构造子类，析构的顺序和构造的顺序相反
+	Son s;
+}
+
+int main()
+{
+	test();
+	return 0;
+}
+
+结果：
+Base构造函数！
+Son构造函数！
+Son析构函数！
+Base析构函数！
+    
+```
+
+> 总结：继承中，先调用父类构造函数，再调用子类构造函数，析构则相反
 
 #### 4.6.5 继承同名成员处理方式
 
