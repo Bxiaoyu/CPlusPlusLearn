@@ -18,5 +18,17 @@
     <ClCompile Include="多态基本概念.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="多态案例1.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="纯虚函数和抽象类.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="虚析构和纯虚析构.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="多态案例2.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
