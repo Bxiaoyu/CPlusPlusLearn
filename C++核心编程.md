@@ -3662,6 +3662,150 @@ int main()
 
 ### 6.2 函数模板
 
+* C++另一种编程思想称为`泛型编程`，主要利用的技术就是模板
+* C++提供两种模板机制：`函数模板`和`类模板`
+
+
+
+#### 6.2.1 函数模板语法
+
+函数模板作用：
+
+建立一个通用函数，其函数返回值类型和形参类型可以不具体制定，用一个`虚拟的类型`来代表。
+
+**语法：**
+
+```c++
+template<typename T>
+函数声明或定义
+```
+
+**解释：**
+
+template --- 声明创建模板
+
+typename --- 表明其后面的符号是一种数据类型，可以用class代替
+
+T --- 通用的数据类型，名称可以替换，通常为大写字母
+
+**函数模板两种调用方式：**
+
+1. 自动类型推导
+
+   ```c++
+   template<typename T>
+   void function(T& a, T& b)
+   
+   int a = 10;
+   int b = 20;
+   function(a, b);
+   ```
+
+2. 显示指定类型
+
+   ```c++
+   template<typename T>
+   void function(T& a, T& b)
+   
+   int a = 10;
+   int b = 20;
+   function<int>(a, b);
+   ```
+
+   
+
+示例：
+
+```c++
+// 声明一个函数模板
+template<typename T>
+void mySwap(T& a, T& b)
+{
+	T temp = a;
+	a = b;
+	b = temp;
+}
+
+int main()
+{
+	int a = 10;
+	int b = 20;
+	// 两种方式使用函数模板
+	// 1.自动类型推导
+	mySwap(a, b);
+	cout << "a = " << a << endl;
+	cout << "b = " << b << endl;
+
+	// 2.显示指定类型
+	int c = 20;
+	int d = 30;
+	mySwap<int>(c, d);
+	cout << "c = " << c << endl;
+	cout << "d = " << d << endl;
+	
+	return 0;
+}
+
+结果：
+a = 20
+b = 10
+c = 30
+d = 20
+```
+
+**总结：**
+
+* 函数模板利用关键字 template
+* 使用函数模板有两种方式：自动类型推导和显示指定类型
+* 模板的目的是为了提高复用性，将类型参数
+
+
+
+#### 6.2.2 函数模板注意事项
+
+**注意事项：**
+
+* 自动类型推导，必须推导出一致的数据类型T，才可以使用
+* 模板必须要确定出T的数据类型，才可以使用
+
+
+
+示例：
+
+```c++
+// 1.自动类型推导，必须推导出一致的数据类型T，才可以使用
+template<typename T>
+void mySwap(T& a, T& b)
+{
+	T temp = a;
+	a = b;
+	b = temp;
+}
+
+void test01()
+{
+	int a = 10;
+	int b = 20;
+	float c = 2.0;
+	mySwap(a, b); // 正确
+	//mySwap(a, c); // 错误，推到不出一致的T
+}
+
+
+// 2.模板必须要确定出T的数据类型，才可以使用
+template<typename T>
+void func()
+{
+	cout << "func调用" << endl;
+}
+
+void test02()
+{
+	//func(); // 错误，虽说没用到T类型，但是也要指定类型，所以自动类型推导推导不出来，报错
+	func<int>(); // 正确，随便指定一个确定的类型，这样就可以正常调用
+}
+```
+
 
 
 ### 6.3 类模板
