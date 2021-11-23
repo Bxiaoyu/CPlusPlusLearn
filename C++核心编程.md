@@ -3788,7 +3788,7 @@ void test01()
 	int b = 20;
 	float c = 2.0;
 	mySwap(a, b); // 正确
-	//mySwap(a, c); // 错误，推到不出一致的T
+	//mySwap(a, c); // 错误，推导不出一致的T
 }
 
 
@@ -3808,4 +3808,1046 @@ void test02()
 
 
 
+#### 6.2.3 普通函数与函数模板的区别
+
+**区别：**
+
+* 普通函数调用时可以发生自动类型转换（隐式类型转换）
+* 函数模板调用时，如果利用自动类型推导，不会发生隐式类型转换
+* 如果使用显示指定类型的方式，可以发生隐式类型转换
+
+
+
+示例：
+
+```c++
+// 普通函数
+int myAdd01(int a, int b)
+{
+	return a + b;
+}
+
+// 函数模板
+template<typename T>
+int myAdd02(int a, int b)
+{
+	return a + b;
+}
+
+void test_func()
+{
+	int a = 10;
+	int b = 20;
+	char c = 'c';
+	// 1.普通函数调用时可以发生自动类型转换（隐式类型转换）
+	cout << myAdd01(a, c) << endl;
+
+	// 2.函数模板调用时，如果利用自动类型推导，不会发生隐式类型转换
+	//cout << myAdd02(a, c) << endl; // 错误
+
+	// 3.如果使用显示指定类型的方式，可以发生隐式类型转换
+	cout << myAdd02<int>(a, c) << endl;
+}
+
+int main()
+{
+	test_func();
+	return 0;
+}
+
+结果：
+    109
+    109
+```
+
+**总结：**建议使用显示指定类型的方式调用函数模板，因为可以自己确定通用类型T
+
+
+
+#### 6.2.4 普通函数和函数模板的调用规则
+
+**规则如下：**
+
+1. 如果函数模板和普通函数都可以实现，优先调用普通函数
+2. 可以通过空模板参数列表来强制调用函数模板
+3. 函数模板也可以发生重载
+4. 如果函数模板可以产生更好的匹配，优先调用函数模板
+
+
+
+示例：
+
+```c++
+void myPrint(int a, int b)
+{
+	cout << "调用普通函数" << endl;
+}
+
+template<typename T>
+void myPrint(T a, T b)
+{
+	cout << "调用函数模板" << endl;
+}
+
+template<typename T>
+void myPrint(T a, T b, T c)
+{
+	cout << "调用重载函数模板" << endl;
+}
+
+void test_normal()
+{
+	int a = 10;
+	int b = 20;
+	// 1.如果函数模板和普通函数都可以实现，优先调用普通函数
+	myPrint(a, b);
+
+	// 2.可以通过空模板参数列表来强制调用函数模板
+	myPrint<>(a, b);
+
+	// 3.函数模板也可以发生重载
+	myPrint(a, b, 10);
+
+	// 4.如果函数模板可以产生更好的匹配，优先调用函数模板
+	char c = 'c';
+	char d = 'd';
+	myPrint(c, d);
+}
+
+int main()
+{
+	test_normal();
+	return 0;
+}
+
+结果：
+调用普通函数
+调用函数模板
+调用重载函数模板
+调用函数模板
+```
+
+**总结：**既然提供了函数模板，最好不要提供普通函数，否则容易出现二义性
+
+
+
+#### 6.2.5 模板的局限性
+
+**局限性：**
+
+* 模板的通用性并不是万能的
+
+例如：
+
+```c++
+template<typename T>
+void f(T a, T b)
+{
+    a = b;
+}
+```
+
+在上述代码中提供的赋值操作，如果传入的a和b是一个数组，就无法实现
+
+
+
+再比如：
+
+```c++
+template<typename T>
+void f(T a, T b)
+{
+    if(a > b){
+        ...
+    }
+}
+```
+
+在上述代码中，如果T的数据类型传入的是像Person这种自定义数据类型，也无法正常运行。
+
+
+
+因此，C++为了解决这种问题，提供模板的重载，可以为这些`特定的类型`提供`具体化的模板`
+
+
+
+示例：
+
+```c++
+class Person {
+public:
+	Person(string name, int age) :m_name(name), m_age(age)
+	{
+	}
+
+public:
+	string m_name;
+	int m_age;
+};
+
+template<typename T>
+bool myCompare(T& a, T& b)
+{
+	if (a != b)
+		return false;
+	return true;
+}
+
+// 利用具体化的Person数据类型版本来实现代码，具体化优先调用
+template<> bool myCompare(Person& p1, Person& p2)
+{
+	if (p1.m_name == p2.m_name && p1.m_age == p2.m_age)
+		return true;
+	return false;
+}
+
+
+void test_myCompare()
+{
+	Person p1("Tom", 18);
+	Person p2("Jack", 20);
+
+	if (myCompare(p1, p2))
+	{
+		cout << "p1 == p2" << endl;
+	}
+	else
+	{
+		cout << "p1 != p2" << endl;
+	}
+}
+
+int main()
+{
+	test_myCompare();
+	return 0;
+}
+
+结果：
+p1 != p2
+```
+
+**总结：**
+
+* 利用具体化的模板，可以解决自定义数据类型的通用化
+* 学习模板并不是为了写模板，而是能够在STL中运用系统提供的模板
+
+
+
 ### 6.3 类模板
+
+#### 6.3.1 类模板语法
+
+类模板作用：
+
+* 建立一个通用类，类中的成员数据类型可以不具体指定，用一个`虚拟类型` 来代表。
+
+
+
+**语法：**
+
+```c++
+template<typename T>
+类
+```
+
+解释：
+
+template --- 声明创建模板
+
+typename --- 表明其后面的符号是一种数据类型，可以用class代替
+
+T --- 通用的数据类型，名称可以替换，通常为大写字母
+
+
+
+示例：
+
+```c++
+template<class NameType, class AgeType>
+class Person {
+public:
+	Person(NameType name, AgeType age):m_name(name), m_age(age)
+	{
+	}
+
+	void showPerson()
+	{
+		cout << "Name: " << m_name << "\tAge: " << m_age << endl;
+	}
+
+public:
+	NameType m_name;
+	AgeType m_age;
+};
+
+void test01()
+{
+	Person<string, int> p("哪吒", 500);
+	p.showPerson();
+}
+
+int main()
+{
+	test01();
+	return 0;
+}
+
+结果：
+Name: 哪吒      Age: 500
+```
+
+**总结：**类模板与函数模板语法相似，在声明模板template后加类，此类称为模板类
+
+
+
+#### 6.3.2 类模板与函数模板区别
+
+类模板和函数模板的区别主要有两点：
+
+1. 类模板没有自动类型推导的使用方式
+2. 类模板在模板参数列表中可以有默认参数
+
+
+
+示例：
+
+```c++
+// 类模板与函数模板的区别
+template<typename NameType, typename AgeType=int> // 指定默认参数类型
+class Person {
+public:
+	Person(NameType name, AgeType age):m_name(name), m_age(age)
+	{
+	}
+
+	void showPerson()
+	{
+		cout << "Name: " << m_name << "\tAge: " << m_age << endl;
+	}
+
+public:
+	NameType m_name;
+	AgeType m_age;
+};
+
+// 1. 类模板没有自动类型推导的使用方式
+void test011()
+{
+	//Person p("悟空", 1000); // 错误，无法用自动类型推导
+
+	Person<string, int> p("悟空", 1000);
+	p.showPerson();
+}
+
+// 2.类模板在模板参数列表中可以有默认参数
+void test012()
+{
+	Person<string> p("八戒", 999);
+	p.showPerson();
+}
+
+int main()
+{
+	test011();
+	test012();
+	return 0;
+}
+
+结果:
+Name: 悟空      Age: 1000
+Name: 八戒      Age: 999
+```
+
+
+
+#### 6.3.3 类模板中成员函数创建时机
+
+类模板中成员函数和普通类中成员函数创建时机是有区别的：
+
+* 普通类中的成员函数一开始就可以创建
+* 类模板中的成员函数在调用时才创建
+
+
+
+示例：
+
+```c++
+class Person1 {
+public:
+	void showPerson()
+	{
+		cout << "Person1 show" << endl;
+	}
+};
+
+class Person2 {
+public:
+	void showPerson()
+	{
+		cout << "Person2 show" << endl;
+	}
+};
+
+template<typename T>
+class MyClass {
+public:
+	// 类模板中的成员函数调用时才创建
+	void func1()
+	{
+		obj.showPerson1();
+	}
+
+	void func2()
+	{
+		obj.showPerson2();
+	}
+public:
+	T obj;
+};
+
+void test_model()
+{
+	MyClass<Person1> m;
+	m.func1();
+	//m.func2(); // 编译会出错，说明函数调用才会去创建成员函数
+}
+```
+
+
+
+#### 6.3.4 类模板对象做函数参数
+
+一共有三种传入方式：
+
+1. 指定传入类型      --- 直接显示对象的数据类型（推荐使用）
+2. 参数模板化         --- 将对象中的参数变为模板进行传递
+3. 整个类模板化      --- 将这个对象类型模板化进行传递
+
+
+
+示例：
+
+```c++
+template<typename T1, typename T2>
+class Person {
+public:
+	Person(T1 name, T2 age):m_name(name), m_age(age)
+	{
+	}
+
+	void showPerson()
+	{
+		cout << "Name：" << m_name << "\tAge: " << m_age << endl;
+	}
+public:
+	T1 m_name;
+	T2 m_age;
+};
+
+// 1.指定传入类型
+void printPerson1(Person<string, int>& p)
+{
+	p.showPerson();
+}
+
+void test_01()
+{
+	Person<string, int> p("悟空", 100);
+	printPerson1(p);
+}
+
+// 2.参数模板化
+template<typename T1, typename T2>
+void printPerson2(Person<T1, T2>& p)
+{
+	p.showPerson();
+	cout << "T1的类型为：" << typeid(T1).name() << endl;
+	cout << "T2的类型为：" << typeid(T2).name() << endl;
+}
+
+void test_02()
+{
+	Person<string, int> p("八戒", 99);
+	printPerson2(p);
+}
+
+// 3.整个类模板化
+template<typename T>
+void printPerson3(T& p)
+{
+	p.showPerson();
+	cout << "T的数据类型为：" << typeid(T).name() << endl;
+}
+
+void test_03()
+{
+	Person<string, int> p("唐僧", 30);
+	printPerson3(p);
+}
+
+int main()
+{
+	test_01();
+	test_02();
+	test_03();
+	return 0;
+}
+
+结果：
+Name: 悟空      Age: 100
+    
+Name: 八戒      Age: 99
+T1的类型为：class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >
+T2的类型为：int
+    
+Name: 唐僧      Age: 30
+T的数据类型为：class Person<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >,int>
+```
+
+**总结：**
+
+* 通过类模板创建的对象，可以有三种方式向函数中进行传参
+* 使用比较广泛的是第一种：指定传入类型
+
+
+
+#### 6.3.5 类模板与继承
+
+当类模板碰到继承时，需要注意以下几点：
+
+* 当子类继承的父类是一个模板时，子类在声明的时候，要指定出父类中T的类型
+* 如果不指定类型，编译器无法给子类分配内存
+* 如果想灵活的指出父类中T的类型，子类也需要变为类模板
+
+
+
+示例：
+
+```c++
+template<typename T>
+class Base {
+public:
+	T m;
+};
+
+// 1.当子类继承的父类是一个模板时，子类在声明的时候，要指定出父类中T的类型
+// 如果不指定类型，编译器无法给子类分配内存
+//class Son:public Base // 错误，必须要知道父类中T的类型，才能继承给子类
+class Son :public Base<int>
+{
+
+};
+
+// 2.如果想灵活的指出父类中T的类型，子类也需要变为类模板
+template<typename T1, typename T2>
+class Son2 :public Base<T2> {
+public:
+	Son2()
+	{
+		cout << "T1的类型为：" << typeid(T1).name() << endl;
+		cout << "T2的类型为：" << typeid(T2).name() << endl;
+	}
+public:
+	T1 obj;
+};
+
+void test_func()
+{
+	Son2<int, char> s;
+}
+
+int main()
+{
+	test_func();
+	return 0;
+}
+
+结果：
+T1的类型为：int
+T2的类型为：char
+```
+
+**总结：**如果父类时类模板，子类需要指定出父类中T的数据类型
+
+#### 6.3.6 类模板成员函数类外实现
+
+目标：能够掌握类模板中的成员函数类外实现
+
+
+
+示例：
+
+```c++
+template<typename T1, typename T2>
+class Person {
+public:
+	Person(T1 name, T2 age);
+
+	void showPerson();
+public:
+	T1 m_name;
+	T2 m_age;
+};
+
+// 构造函数类外实现
+template<typename T1, typename T2>
+Person<T1, T2>::Person(T1 name, T2 age):m_name(name), m_age(age)
+{
+}
+
+// 成员函数类外实现
+template<typename T1, typename T2>
+void Person<T1, T2>::showPerson()
+{
+	cout << "Name: " << m_name << "\tAge: " << m_age << endl;
+}
+
+int main()
+{
+	Person<string, int> p("Tom", 22);
+	p.showPerson();
+	return 0;
+}
+
+结果：
+Name: Tom       Age: 22
+```
+
+**总结：**类模板中成员函数类外实现时，需要加上模板参数列表
+
+
+
+#### 6.3.7 类模板分文件编写
+
+**问题：**
+
+* 类模板中成员函数创建时机是在调用阶段，导致分文件编写时链接不到
+
+**解决：**
+
+* 解决方式1：直接包含.cpp源文件
+* 解决方式2：将声明和实现写在同一个文件中，并更改后缀名为.hpp，hpp是约定的名称，并不是强制（推荐的解决方式）
+
+
+
+示例：
+
+person.hpp文件内容：
+
+```c++
+template<typename T1, typename T2>
+class Person {
+public:
+	Person(T1 name, T2 age);
+
+	void showPerson();
+public:
+	T1 m_name;
+	T2 m_age;
+};
+
+// 构造函数类外实现
+template<typename T1, typename T2>
+Person<T1, T2>::Person(T1 name, T2 age) :m_name(name), m_age(age)
+{
+}
+
+// 成员函数类外实现
+template<typename T1, typename T2>
+void Person<T1, T2>::showPerson()
+{
+	cout << "Name: " << m_name << "\tAge: " << m_age << endl;
+}
+```
+
+分文件测试文件中的代码：
+
+```c++
+#include <iostream>
+using namespace std;
+
+// 解决方式1：直接包含.cpp源文件
+#include "person.hpp"
+
+void test_mul()
+{
+	Person<string, int>p("Tom", 18);
+	p.showPerson();
+}
+
+// 解决方式2：将声明和实现写在同一个文件中，并更改后缀名为.hpp
+
+int main()
+{
+	test_mul();
+	return 0;
+}
+
+结果：
+Name: Tom       Age: 18
+```
+
+**总结：**主流的解决方案是第二种，将类模板和成员函数写在一起，并将后缀名改为.hpp
+
+
+
+#### 6.3.8 类模板与友元
+
+目标：掌握类模板配合友元函数的类内和类外实现
+
+全局函数类内实现：直接在类内声明友元即可
+
+全局函数类外实现：需要提前让编译器知道全局函数的存在
+
+
+
+示例：
+
+```c++
+// 提前让编译器知道Person类的存在
+template<typename T1, typename T2>
+class Person;
+
+// 2.全局函数类外实现
+template<typename T1, typename T2>
+void printPerson2(Person<T1, T2> p)
+{
+	cout << endl << "类外实现：" << endl;
+	cout << "Name: " << p.m_name << "\tAge: " << p.m_age << endl;
+}
+
+// 通过全局函数打印Person信息
+template<typename T1, typename T2>
+class Person {
+	// 1.全局函数类内实现
+	friend void printPerson(Person<T1, T2> p)
+	{
+		cout << "Name: " << p.m_name << "\tAge: " << p.m_age << endl;
+	}
+
+	// 2.全局函数类外实现，需要提前让编译器知道全局函数的存在
+	// 加一个空模板的参数列表
+	friend void printPerson2<>(Person<T1, T2> p);
+public:
+	Person(T1 name, T2 age):m_name(name), m_age(age)
+	{
+	}
+
+private:
+	T1 m_name;
+	T2 m_age;
+};
+
+// 1.全局函数类内实现
+void test_inner()
+{
+	Person<string, int> p("Tom", 20);
+	printPerson(p);
+}
+
+void test_outer()
+{
+	Person<string, int> p("Jack", 18);
+	printPerson2(p);
+}
+
+int main()
+{
+	test_inner();
+	test_outer();
+	return 0;
+}
+
+结果：
+Name: Tom       Age: 20
+
+类外实现：
+Name: Jack      Age: 18
+```
+
+**总结：**建议全局函数做类内实现，用法简单，而且编译器可以直接识别
+
+
+
+#### 6.3.9 类模板案例
+
+
+
+案例描述：实现一个通用的数组类
+
+要求如下：
+
+* 可以内置数据类型以及自定义数据类型进行存储
+* 将数组中的数据存储到堆区
+* 构造函数中可以传入数组的容量
+* 提供对应的拷贝构造函数以及operator=防止浅拷贝问题
+* 提供尾插法和尾删法对数组中的数据进行增加删除
+* 可以通过下标的方式访问数组中的元素
+* 可以获取数组中当前元素的个数和数组的容量
+
+
+
+示例：
+
+MyArray.hpp代码：
+
+```c++
+#pragma once
+#include <iostream>
+#include <cassert>
+
+using namespace std;
+
+template<typename T>
+class MyArray {
+public:
+	// 有参构造
+	MyArray(int capacity)
+	{
+		//cout << "MyArray有参构造调用" << endl;
+		this->m_Capacity = capacity;
+		this->m_Size = 0;
+		this->pAddress = new T[this->m_Capacity];
+	}
+
+	// 拷贝构造函数
+	MyArray(const MyArray& arr)
+	{
+		//cout << "MyArray拷贝构造调用" << endl;
+		this->m_Capacity = arr.m_Capacity;
+		this->m_Size = arr.m_Size;
+
+		// 深拷贝
+		this->pAddress = new T[arr.m_Capacity];
+		// 将arr中的元素拷贝过来
+		for (int i = 0; i < this->m_Size; i++)
+		{
+			this->pAddress[i] = arr.pAddress[i];
+		}
+	}
+
+	// operator= 防止浅拷贝
+	MyArray& operator=(const MyArray& arr)
+	{
+		//cout << "MyArray operator= 调用" << endl;
+		// 先判断原来堆区是否有数据，如果有先释放
+		if (this->pAddress != nullptr)
+		{
+			delete[] this->pAddress;
+			this->pAddress = nullptr;
+
+			this->m_Capacity = 0;
+			this->m_Size = 0;
+		}
+
+		this->m_Capacity = arr.m_Capacity;
+		this->m_Size = arr.m_Size;
+
+		// 深拷贝
+		this->pAddress = new T[arr.m_Capacity];
+		// 将arr中的元素拷贝过来
+		for (int i = 0; i < this->m_Size; i++)
+		{
+			this->pAddress[i] = arr.pAddress[i];
+		}
+
+		return *this;
+	}
+
+	// 析构函数
+	~MyArray()
+	{
+		//cout << "MyArray析构函数调用" << endl;
+		if (this->pAddress != nullptr)
+		{
+			delete[] this->pAddress;
+			this->pAddress = nullptr;
+		}
+	}
+
+	// 尾插法
+	void push_back(const T& val)
+	{
+		// 判断容量是否满
+		if (this->m_Size == this->m_Capacity)
+			return;
+		this->pAddress[this->m_Size] = val; // 将数据插入到数组末尾
+		this->m_Size++; // 更新数组当前元素个数
+	}
+
+	// 尾删法
+	void pop_back()
+	{
+		// 让用户访问不到最后一个元素，即为尾删
+		if (this->m_Size == 0)
+			return;
+		this->m_Size--;
+	}
+
+	// 通过下标方式访问
+	T& operator[](int index)
+	{
+		// 判断下标合法性
+		assert(index >= 0 && index < this->m_Size);
+		// 返回值
+		return this->pAddress[index];
+	}
+
+	// 返回数组容量
+	int get_capacity()
+	{
+		return this->m_Capacity;
+	}
+
+	// 返回数组大小
+	int get_size()
+	{
+		return this->m_Size;
+	}
+private:
+	T* pAddress;    // 指针指向堆区开辟的真实数组
+
+	int m_Capacity; // 数组容量
+
+	int m_Size;     // 数组大小
+};
+```
+
+测试代码如下：
+
+```c++
+#include <iostream>
+#include <string>
+using namespace std;
+#include "MyArray.hpp"
+
+// 测试自定义数据类型
+class Person {
+public:
+	Person()
+	{
+	}
+
+	Person(string name, int age) :m_name(name), m_age(age)
+	{
+	}
+public:
+	string m_name;
+	int m_age;
+};
+
+// 打印数据
+void printArray(MyArray<int>& arr)
+{
+	for (int i = 0; i < arr.get_size(); i++)
+	{
+		cout << arr[i] << " ";
+	}
+	cout << endl;
+}
+
+// 打印自定义数据
+void printPersonArray(MyArray<Person>& arr)
+{
+	for (int i = 0; i < arr.get_size(); i++)
+	{
+		cout << "Name: " << arr[i].m_name << "\tAge: " << arr[i].m_age << endl;
+	}
+}
+
+void test_array()
+{
+	MyArray<int> arr(10);
+	for (int i = 0; i < 6; i++)
+	{
+		// 尾插法
+		arr.push_back(i + 1);
+	}
+
+	cout << "插入的数据为：" << endl;
+	printArray(arr);
+	cout << "数组大小为：" << arr.get_size() << endl;
+	cout << "数组容量为：" << arr.get_capacity() << endl;
+
+	MyArray<int> arr2(arr);
+	arr2.pop_back();
+	cout << "arr2尾删后: " << endl;
+	cout << "arr2容量为：" << arr2.get_capacity() << endl;
+	cout << "arr2大小为：" << arr2.get_size() << endl;
+}
+
+void test_arry_person()
+{
+	MyArray<Person> arr(10);
+	Person p1("悟空", 100);
+	Person p2("八戒", 98);
+	Person p3("沙僧", 99);
+	Person p4("唐僧", 40);
+	Person p5("女儿国国王", 33);
+	Person p6("嫦娥", 100);
+
+	arr.push_back(p1);
+	arr.push_back(p2);
+	arr.push_back(p3);
+	arr.push_back(p4);
+	arr.push_back(p5);
+	arr.push_back(p6);
+
+	cout << endl << "--------------------------------------" << endl;
+	cout << "Arr容量为：" << arr.get_capacity() << endl;
+	cout << "Arr大小为：" << arr.get_size() << endl;
+	printPersonArray(arr);
+}
+
+int main()
+{
+	test_array();
+	test_arry_person();
+	return 0;
+}
+
+结果为：
+插入的数据为：
+1 2 3 4 5 6
+数组大小为：6
+数组容量为：10
+arr2尾删后:
+arr2容量为：10
+arr2大小为：5
+
+--------------------------------------
+Arr容量为：10
+Arr大小为：6
+Name: 悟空      Age: 100
+Name: 八戒      Age: 98
+Name: 沙僧      Age: 99
+Name: 唐僧      Age: 40
+Name: 女儿国国王        Age: 33
+Name: 嫦娥      Age: 100
+```
+
+
+
+## 7.STL-函数对象
+
+### 7.1 函数对象
+
+
+
+#### 7.1.1 函数对象概念
+
+
+
+#### 7.1.2 函数对象使用
+
+
+
+### 7.2 谓词
+
+
+
+### 7.3 内建函数对象
+
+
+
