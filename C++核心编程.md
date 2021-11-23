@@ -4833,21 +4833,447 @@ Name: 嫦娥      Age: 100
 
 ### 7.1 函数对象
 
-
-
 #### 7.1.1 函数对象概念
 
+**概念：**
 
+* 重载`函数调用操作符`的类，其对象常称为`函数对象`
+* 函数对象使用重载的（）时，行为类似函数调用，也叫仿函数
+
+**本质：**
+
+函数对象（仿函数）是一个`类`，不是一个函数
 
 #### 7.1.2 函数对象使用
 
+**特点：**
 
+* 函数对象在使用时，可以像普通函数那样调用，可以有参数，可以有返回值
+* 函数对象超出普通函数的概念，函数对象可以有自己的状态
+* 函数对象可以作为参数传递
+
+
+
+示例：
+
+```c++
+class MyAdd {
+public:
+	int operator()(int v1, int v2)
+	{
+		return v1 + v2;
+	}
+};
+
+// 1.函数对象在使用时，可以像普通函数那样调用，可以有参数，可以有返回值
+void test01()
+{
+	MyAdd add;
+	cout << add(10, 20) << endl;
+}
+
+// 2.函数对象超出普通函数的概念，函数对象可以有自己的状态
+class MyPrint {
+public:
+	MyPrint():m_count(0)
+	{
+	}
+
+	void operator()(string text)
+	{
+		cout << text << endl;
+		this->m_count++;
+	}
+
+public:
+	int m_count; // 内部状态
+};
+
+void test02()
+{
+	MyPrint mp;
+	mp("hello world!");
+	mp("hello world!");
+	mp("hello world!");
+	mp("hello world!");
+	mp("hello world!");
+
+	cout << "MyPrint调用次数: " << mp.m_count << endl;
+}
+
+// 3.函数对象可以作为参数传递
+void doPrint(MyPrint& mp, string text)
+{
+	mp(text);
+}
+
+void test03()
+{
+	MyPrint mp;
+	doPrint(mp, "hello python");
+}
+
+int main()
+{
+	test01();
+	test02();
+	test03();
+	return 0;
+}
+
+结果：
+30
+hello world!
+hello world!
+hello world!
+hello world!
+hello world!
+MyPrint调用次数: 5
+hello python
+
+```
+
+**总结：**仿函数写法非常灵活，可以作为参数进行传递
 
 ### 7.2 谓词
 
+####  7.2.1 谓词概念
 
+**概念：**
+
+* 返回bool类型的仿函数称为`谓词`
+* 如果operator()接受一个参数，那么叫做一元谓词
+* 如果operator()接受两个参数，那么叫做二元谓词
+
+#### 7.2.2 一元谓词
+
+示例：
+
+```c++
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+// 仿函数，返回bool类型的仿函数称为`谓词`
+// 如果operator()接受一个参数，那么叫做一元谓词
+
+class GreaterFive {
+public:
+	bool operator()(int val)
+	{
+		return val > 5;
+	}
+};
+
+void test()
+{
+	vector<int> v;
+	for (int i = 0; i < 10; i++)
+	{
+		v.emplace_back(i + 1);
+	}
+
+	// 查找容器中大于5的数
+	// GreaterFive()匿名函数对象
+	auto it = find_if(v.begin(), v.end(), GreaterFive());
+	if (it == v.end())
+	{
+		cout << "未找到" << endl;
+	}
+	else
+	{
+		cout << "找到大于5的数字为：" << *it << endl;
+	}
+}
+
+int main()
+{
+	test();
+	return 0;
+}
+
+结果：
+找到大于5的数字为：6
+```
+
+**总结：**参数只有一个的谓词，称为一元谓词
+
+
+
+#### 7.2.3 二元谓词
+
+示例：
+
+```c++
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+// 二元谓词
+class MyCompare {
+public:
+	bool operator()(int v1, int v2)
+	{
+		return v1 > v2;
+	}
+};
+
+void test04()
+{
+	vector<int> v;
+	v.emplace_back(10);
+	v.emplace_back(50);
+	v.emplace_back(80);
+	v.emplace_back(20);
+	v.emplace_back(30);
+	v.emplace_back(40);
+
+	sort(v.begin(), v.end());
+	for (auto it = v.begin(); it != v.end(); it++)
+	{
+		cout << *it << " ";
+	}
+	cout << endl <<"-------------------------" << endl;
+
+	// 使用函数对象，改变算法策略，变为排序规则从大到小
+	sort(v.begin(), v.end(), MyCompare());
+	for (auto it = v.begin(); it != v.end(); it++)
+	{
+		cout << *it << " ";
+	}
+	cout << endl;
+}
+
+int main()
+{
+	test04();
+	return 0;
+}
+
+结果：
+10 20 30 40 50 80
+-------------------------
+80 50 40 30 20 10
+
+```
+
+**总结：**参数只有两个的谓词，称为二元谓词
 
 ### 7.3 内建函数对象
 
+#### 7.3.1 内建函数对象的意义
+
+**概念：**
+
+* STL内建了一些函数对象
+
+**分类：**
+
+* 算数仿函数
+* 关系仿函数
+* 逻辑仿函数
+
+**用法：**
+
+* 这些仿函数所产生的对象，用法和一般函数完全相同
+* 使用内建函数对象，需要引入头文件 `#include <functional>`
 
 
+
+#### 7.3.2 算数仿函数
+
+**功能描述：**
+
+* 实现四则运算
+* 其中negate是一元运算，其他是二元运算
+
+**仿函数原型：**
+
+* `template<class T> T plus<T>`                //加法仿函数
+* `template<class T> T minus<T>`             //减法仿函数
+* `template<class T> T multiplies<T>`    //乘法仿函数
+* `template<class T> T divides<T>`         //除法仿函数
+* `template<class T> T modulus<T>`         //取模仿函数
+* `template<class T> T negate<T>`          // 取反仿函数
+
+
+
+示例：
+
+```c++
+#include <iostream>
+#include <functional>
+
+using namespace std;
+
+// 内建算数仿函数
+
+// negate 一元仿函数 取反仿函数
+void test_negate()
+{
+	negate<int> n;
+	cout << n(10) << endl;
+}
+
+// plus 二元仿函数 加法
+void test_plus()
+{
+	plus<int>p;
+	cout << p(10, 20) << endl;
+}
+
+int main()
+{
+	test_negate();
+	test_plus();
+
+	return 0;
+}
+结果：
+-10
+30
+```
+
+**总结：**使用内建函数对象时，需要引入头文件 `#include <functional>`
+
+
+
+#### 7.3.3 关系仿函数
+
+**功能描述：**
+
+* 实现关系对比
+
+**仿函数原型：**
+
+* `template<class T> bool equal_to<T>                 // 等于`
+* `template<class T> bool not_equal_to<T>                 // 不等于`
+* `template<class T> bool greater<T>                 // 大于`
+* `template<class T> bool greater_equal<T>                 // 大于等于`
+* `template<class T> bool less<T>                 // 小于`
+* `template<class T> bool less_equal<T>                 //  小于等于`
+
+
+
+示例：
+
+```c++
+#include <iostream>
+#include <functional>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+void test_greater()
+{
+	vector<int> v;
+	v.emplace_back(10);
+	v.emplace_back(50);
+	v.emplace_back(80);
+	v.emplace_back(20);
+	v.emplace_back(30);
+	v.emplace_back(40);
+
+	for (auto it = v.begin(); it != v.end(); it++)
+	{
+		cout << *it << " ";
+	}
+	cout << endl << "------------------" << endl;
+
+	// 降序
+	sort(v.begin(), v.end(), greater<int>());
+	for (auto it = v.begin(); it != v.end(); it++)
+	{
+		cout << *it << " ";
+	}
+	cout << endl;
+}
+
+int main()
+{
+	test_greater();
+	return 0;
+}
+
+结果：
+10 50 80 20 30 40
+------------------
+80 50 40 30 20 10
+
+```
+
+**总结：**关系仿函数中最常用的就是 greater<> 大于
+
+#### 7.3.4 逻辑仿函数
+
+**功能描述：**
+
+* 实现逻辑运算
+
+**函数原型：**
+
+* `template<class T> bool logical_and<T>`    // 逻辑与
+* `template<class T> bool logical_or<T>`      // 逻辑或
+* `template<class T> bool logical_not<T>`    // 逻辑非
+
+
+
+示例：
+
+```c++
+#include <iostream>
+#include <functional>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+// 逻辑仿函数
+void test_logical()
+{
+	vector<bool> v;
+	v.push_back(true);
+	v.push_back(true);
+	v.push_back(false);
+	v.push_back(true);
+	v.push_back(false);
+
+	for (auto it : v)
+	{
+		cout << it << " ";
+	}
+	cout << endl << "------------------" << endl;
+
+	// 利用逻辑非 将容器v中的元素搬运到容器v2中，并执行取反操作
+	vector<bool> v2;
+	v2.resize(v.size());
+
+	transform(v.begin(), v.end(), v2.begin(), logical_not<bool>());
+	for (auto it : v2)
+	{
+		cout << it << " ";
+	}
+}
+
+int main()
+{
+	test_logical();
+	return 0;
+}
+
+结果：
+1 1 0 1 0
+------------------
+0 0 1 0 1
+```
+
+**总结：**逻辑仿函数在实际中应用较少，了解即可
+
+
+
+## 完结
+
+对一些知识点的总结
