@@ -170,7 +170,7 @@ UE4的C++接口中，FRotator的顺序则依次为：pitch、yaw、roll，这点
 
 ### 2.1、UE4反射用到的宏
 
-两个反射宏：***UPROPERTY*** 和 ***UFUNCTION***。具体的使用和参数之类的参考官方文档：[UE4官方文档]([属性 | 虚幻引擎文档 (unrealengine.com)](https://docs.unrealengine.com/4.27/zh-CN/ProgrammingAndScripting/GameplayArchitecture/Properties/))，在宏中可以加入**属性说明符**、**元数据说明符（meta=(...)）**、**分类说明符（Category="AAA"）**等。
+主要介绍两个反射宏：***UPROPERTY*** 和 ***UFUNCTION***。具体的使用和参数之类的参考官方文档：[UE4官方文档]([属性 | 虚幻引擎文档 (unrealengine.com)](https://docs.unrealengine.com/4.27/zh-CN/ProgrammingAndScripting/GameplayArchitecture/Properties/))，在宏中可以加入**属性说明符**、**元数据说明符（meta=(...)）**、**分类说明符（Category="AAA"）**等。
 
 * **UPROPERTY**属性宏参数：
   * EditAnywhere：在编辑中可见，且可编辑；
@@ -192,3 +192,63 @@ UE4的C++接口中，FRotator的顺序则依次为：pitch、yaw、roll，这点
 
 
 
+
+
+### 2.2、UE4如何定义枚举和结构体
+
+UE4中定义枚举和结构体大体上和C++是一样的，只是要和蓝图交互的话有些不一样，要增加额外的关键字。
+
+
+
+命名规则：
+
+* Axxx：继承自AActor
+* Uxxx：继承自UObject
+* Fxxx：原生C++
+* Exxx：枚举
+* Ixxx：接口
+* Sxxx：slate
+
+
+
+代码示例：
+
+```c++
+// 定义枚举类，此写法是C++11的写法
+UENUM(BlueprintType)  // 暴露给蓝图
+enum class UColorType: uint8
+{
+	RED,
+	GREEN,
+	BLUE
+};
+
+// 定义结构体
+USTRUCT(BlueprintType)  // 暴露给蓝图
+struct FTestStruct  
+{
+	GENERATED_USTRUCT_BODY()  // 增加反射宏
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 num;
+};
+```
+
+
+
+
+
+### 2.3、浅析什么是UObject
+
+UObject，它是所有引擎层面、游戏层面对象的基类，为序列化，网络同步，反射，蓝图，等提供了广泛的支持。
+
+重要的功能介绍：
+
+* **反射**：所谓反射，抽象的来说就是程序在运行时动态获取对象信息以及调用对象方法的能力，原生C++不支持反射，  UE4中，UE4反射的功能意义之一就是支持蓝图和C++的交互功能。如UCLASS()、UPROPERTY()、UFUNCTION()等就是应用体现；
+* **垃圾回收**（GC）：对对象生命周期的管理，对内存堆中已经死亡的或者长时间没有使用的对象进行清除和回收，有很多垃圾回收算法。原生C++不支持垃圾回收，需要开发人员自行管理；
+* **序列化**：将对象的状态信息转换为可以存储或传输的形式的过程；
+  * 序列化：把对象转换为字节序列的过程称为对象的序列化
+  * 反序列化：把字节序列恢复为对象的过程称为对象的反序列化
+* **CDO**（class default object）类默认对象 ：
+  * 主要作用就是用于为类提供默认值，例如我们在编辑器中编辑的蓝图类的属性就是保存在该蓝图类的 CDO 中，且在构造此蓝图类的实例时会以其 CDO 作为默认的模板对象来初始化蓝图类实例的属性；
+  * CDO 对象是具有稳定的网络路径的，可由网络同步其引用，这使得我们在同步一个 UObject 对象的属性时，仅需同步和 CDO 中不同的属性即可。同样的道理在序列化时也只需保存和 CDO 中不同的差异属性即可。
