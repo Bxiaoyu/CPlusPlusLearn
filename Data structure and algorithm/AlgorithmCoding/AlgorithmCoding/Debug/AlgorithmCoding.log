@@ -1,0 +1,8 @@
+﻿  main.cpp
+F:\paper\CPlusPlusLearn\Data structure and algorithm\AlgorithmCoding\AlgorithmCoding\SortTestHelper.h(25,13): warning C4244: “参数”: 从“time_t”转换到“unsigned int”，可能丢失数据
+F:\paper\CPlusPlusLearn\Data structure and algorithm\AlgorithmCoding\AlgorithmCoding\SortTestHelper.h(42,13): warning C4244: “参数”: 从“time_t”转换到“unsigned int”，可能丢失数据
+F:\paper\CPlusPlusLearn\Data structure and algorithm\AlgorithmCoding\AlgorithmCoding\FileOps.h(16,25): warning C4018: “<”: 有符号/无符号不匹配
+F:\paper\CPlusPlusLearn\Data structure and algorithm\AlgorithmCoding\AlgorithmCoding\FileOps.h(30,21): warning C4018: “<”: 有符号/无符号不匹配
+F:\paper\CPlusPlusLearn\Data structure and algorithm\AlgorithmCoding\AlgorithmCoding\FileOps.h(62,29): warning C4018: “<=”: 有符号/无符号不匹配
+F:\paper\CPlusPlusLearn\Data structure and algorithm\AlgorithmCoding\AlgorithmCoding\main.cpp(16,12): warning C4244: “参数”: 从“time_t”转换到“unsigned int”，可能丢失数据
+  AlgorithmCoding.vcxproj -> F:\paper\CPlusPlusLearn\Data structure and algorithm\AlgorithmCoding\Debug\AlgorithmCoding.exe
