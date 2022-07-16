@@ -211,6 +211,76 @@ public:
 		root = remove(root, key);
 	}
 
+	// 寻找key的floor值，递归算法
+	// 如果不存在key的floor值（key比BST中的最小值还小），返回nullptr
+	Key* floor(Key key)
+	{
+		if (count == 0 || key < minimun())
+		{
+			return nullptr;
+		}
+
+		Node* floorNode = floor(root, key);
+		return &(floorNode->key);
+	}
+
+	// 寻找key的ceil值，递归算法
+	// 如果不存在key的ceil值（key比BST中的最大值还大），返回nullptr
+	Key* ceil(Key key)
+	{
+		if (count == 0 || key > maximum())
+		{
+			return nullptr;
+		}
+
+		Node* ceilNode = ceil(root, key);
+		return &(ceilNode->key);
+	}
+
+	// 查找key的前驱
+	// 如果不存在key的前驱(key不存在, 或者key是整棵二叉树中的最小值), 则返回NULL
+	Key* predecessor(Key key)
+	{
+		Node* node = search(root, key);
+		// 如果key所在的节点不存在，则key没有前驱，返回null
+		if (node == nullptr)
+		{
+			return nullptr;
+		}
+
+		// 如果key所在的节点左子树不为空,则其左子树的最大值为key的前驱
+		if (node->left != nullptr)
+		{
+			return &(maximum(node->left)->key);
+		}
+
+		// 否则, key的前驱在从根节点到key的路径上, 在这个路径上寻找到比key小的最大值, 即为key的前驱
+		Node* preNode = predecessorFromAncestor(root, key);
+		return preNode == nullptr ? nullptr : &(preNode->key);
+	}
+
+	// 查找key的后继, 递归算法
+	// 如果不存在key的后继(key不存在, 或者key是整棵二叉树中的最大值), 则返回NULL
+	Key* successor(Key key)
+	{
+		Node* node = search(root, key);
+		// 如果key所在的节点不存在, 则key没有前驱, 返回NULL
+		if (node == nullptr)
+		{
+			return nullptr;
+		}
+
+		// 如果key所在的节点右子树不为空,则其右子树的最小值为key的后继
+		if (node->right != nullptr)
+		{
+			return &(minimun(node->right)->key);
+		}
+
+		// 否则, key的后继在从根节点到key的路径上, 在这个路径上寻找到比key大的最小值, 即为key的后继
+		Node* sucNode = successorFromAncestor(root, key);
+		return sucNode == nullptr ? nullptr : &(sucNode->key);
+	}
+
 private:
 	// 递归方式插入新数据(key, value)
 	// 返回插入新节点后的二叉搜索树的根
@@ -430,6 +500,140 @@ private:
 			count--;
 
 			return successor;
+		}
+	}
+
+	// 在以node为根的二叉搜索树中, 寻找key的floor值所处的节点, 递归算法
+	Node* floor(Node* node, Key key)
+	{
+		if (node == nullptr)
+		{
+			return nullptr;
+		}
+
+		// 如果node的key值和要寻找的key值相等
+		// 则node本身就是key的floor节点
+		if (node->key == key)
+		{
+			return node;
+		}
+
+		// 如果node的key值比要寻找的key值大
+		// 则要寻找的key的floor节点一定在node的左子树中
+		if (node->key > key)
+		{
+			return floor(node->left, key);
+		}
+
+		// 如果node->key < key
+		// 则node有可能是key的floor节点, 也有可能不是(存在比node->key大但是小于key的其余节点)
+		// 需要尝试向node的右子树寻找一下
+		Node* tempNode = floor(node->right, key);
+		if (tempNode != nullptr)
+		{
+			return tempNode;
+		}
+
+		return node;
+	}
+
+	// 在以node为根的二叉搜索树中, 寻找key的ceil值所处的节点, 递归算法
+	Node* ceil(Node* node, Key key)
+	{
+		if (node == nullptr)
+		{
+			return nullptr;
+		}
+
+		// 如果node的key值和要寻找的key值相等
+		// 则node本身就是key的ceil节点
+		if (node->key == key)
+		{
+			return node;
+		}
+
+		// 如果node的key值比要寻找的key值小
+		// 则要寻找的key的ceil节点一定在node的右子树中
+		if (node->key < key)
+		{
+			return ceil(node->right, key);
+		}
+
+		// 如果node->key > key
+		// 则node有可能是key的ceil节点, 也有可能不是(存在比node->key小但是大于key的其余节点)
+		// 需要尝试向node的左子树寻找一下
+		Node* tempNode = ceil(node->left, key);
+		if (tempNode == nullptr)
+		{
+			return tempNode;
+		}
+
+		return node;
+	}
+
+	// 在以node为根的二叉搜索树中, 寻找key的祖先中,比key小的最大值所在节点, 递归算法
+	// 算法调用前已保证key存在在以node为根的二叉树中
+	Node* predecessorFromAncestor(Node* node, Key key)
+	{
+		if (node->key == key)
+		{
+			return nullptr;
+		}
+
+		if (key < node->key)
+		{
+			// 如果当前节点大于key, 则当前节点不可能是比key小的最大值
+			// 向下搜索到的结果直接返回
+			return predecessorFromAncestor(node->left, key);
+		}
+		else
+		{
+			assert(key > node->key);
+			// 如果当前节点小于key, 则当前节点有可能是比key小的最大值
+			// 向右继续搜索, 将结果存储到tempNode中
+			Node* tempNode = predecessorFromAncestor(node->right, key);
+			if (tempNode)
+			{
+				return tempNode;
+			}
+			else
+			{
+				// 如果tempNode为空, 则当前节点即为结果
+				return node;
+			}
+		}
+	}
+
+	// 在以node为根的二叉搜索树中, 寻找key的祖先中,比key大的最小值所在节点, 递归算法
+	// 算法调用前已保证key存在在以node为根的二叉树中
+	Node* successorFromAncestor(Node* node, Key key)
+	{
+		if (node->key == key)
+		{
+			return nullptr;
+		}
+
+		if (key > node->key)
+		{
+			// 如果当前节点小于key, 则当前节点不可能是比key大的最小值
+			// 向下搜索到的结果直接返回
+			return successorFromAncestor(node->right, key);
+		}
+		else
+		{
+			assert(key < node->key);
+			// 如果当前节点大于key, 则当前节点有可能是比key大的最小值
+			// 向左继续搜索, 将结果存储到tempNode中
+			Node* tempNode = predecessorFromAncestor(node->left, key);
+			if (tempNode)
+			{
+				return tempNode;
+			}
+			else
+			{
+				// 如果tempNode为空, 则当前节点即为结果
+				return node;
+			}
 		}
 	}
 };
