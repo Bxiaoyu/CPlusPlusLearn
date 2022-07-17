@@ -173,7 +173,7 @@ public:
 	}
 
 	// 寻找最大的键值
-	Key maximum(Node* node)
+	Key maximum()
 	{
 		assert(count != 0);
 		Node* maxNode = maximum(root);
@@ -394,7 +394,7 @@ private:
 			destroy(node->right);
 			
 			delete node;
-			cout--;
+			count--;
 		}
 	}
 

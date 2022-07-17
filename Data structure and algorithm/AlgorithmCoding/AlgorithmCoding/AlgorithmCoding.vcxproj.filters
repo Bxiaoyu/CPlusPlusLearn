@@ -19,6 +19,9 @@
     <Filter Include="头文件\binarySearch">
       <UniqueIdentifier>{12af603b-d182-4031-b199-1e4848441aa2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\unionFind">
+      <UniqueIdentifier>{ae24aeca-3892-454f-a41a-8673e289e718}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -46,6 +49,18 @@
     </ClInclude>
     <ClInclude Include="FileOps.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="UnionFind1.h">
+      <Filter>头文件\unionFind</Filter>
+    </ClInclude>
+    <ClInclude Include="UnionFind2.h">
+      <Filter>头文件\unionFind</Filter>
+    </ClInclude>
+    <ClInclude Include="UnionFindTestHelper.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="UnionFind3.h">
+      <Filter>头文件\unionFind</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

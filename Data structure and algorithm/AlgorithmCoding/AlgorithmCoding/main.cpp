@@ -3,10 +3,12 @@
 #include "SortTestHelper.h"
 #include "BST.h"
 #include "FileOps.h"
+#include "UnionFindTestHelper.h"
 
 using namespace std;
 using namespace SortTestHelper;
 using namespace FileOps;
+using namespace UnionFindTestHelper;
 
 void test_heap()
 {
@@ -84,10 +86,19 @@ void test_binarySearchTree()
 	}
 }
 
+void test_unionFind()
+{
+	int n = 100000;
+	UnionFindTestHelper::testUF1(n);
+	UnionFindTestHelper::testUF2(n);
+	UnionFindTestHelper::testUF3(n);
+}
+
 int main()
 {
 	//test_heap();
 	//test_heapSort();
-	test_binarySearchTree();
+	//test_binarySearchTree();
+	test_unionFind();
 	return 0;
 }

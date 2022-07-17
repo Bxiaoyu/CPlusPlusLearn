@@ -133,6 +133,10 @@
     <ClInclude Include="indexheap.h" />
     <ClInclude Include="maxheap.h" />
     <ClInclude Include="SortTestHelper.h" />
+    <ClInclude Include="UnionFind1.h" />
+    <ClInclude Include="UnionFind2.h" />
+    <ClInclude Include="UnionFind3.h" />
+    <ClInclude Include="UnionFindTestHelper.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

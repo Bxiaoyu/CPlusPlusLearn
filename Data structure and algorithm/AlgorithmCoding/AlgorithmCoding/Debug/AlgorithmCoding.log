@@ -1,8 +1,12 @@
 ﻿  main.cpp
-F:\paper\CPlusPlusLearn\Data structure and algorithm\AlgorithmCoding\AlgorithmCoding\SortTestHelper.h(25,13): warning C4244: “参数”: 从“time_t”转换到“unsigned int”，可能丢失数据
-F:\paper\CPlusPlusLearn\Data structure and algorithm\AlgorithmCoding\AlgorithmCoding\SortTestHelper.h(42,13): warning C4244: “参数”: 从“time_t”转换到“unsigned int”，可能丢失数据
-F:\paper\CPlusPlusLearn\Data structure and algorithm\AlgorithmCoding\AlgorithmCoding\FileOps.h(16,25): warning C4018: “<”: 有符号/无符号不匹配
-F:\paper\CPlusPlusLearn\Data structure and algorithm\AlgorithmCoding\AlgorithmCoding\FileOps.h(30,21): warning C4018: “<”: 有符号/无符号不匹配
-F:\paper\CPlusPlusLearn\Data structure and algorithm\AlgorithmCoding\AlgorithmCoding\FileOps.h(62,29): warning C4018: “<=”: 有符号/无符号不匹配
-F:\paper\CPlusPlusLearn\Data structure and algorithm\AlgorithmCoding\AlgorithmCoding\main.cpp(16,12): warning C4244: “参数”: 从“time_t”转换到“unsigned int”，可能丢失数据
-  AlgorithmCoding.vcxproj -> F:\paper\CPlusPlusLearn\Data structure and algorithm\AlgorithmCoding\Debug\AlgorithmCoding.exe
+E:\gitProject\CPlusPlusLearn\Data structure and algorithm\AlgorithmCoding\AlgorithmCoding\SortTestHelper.h(25,13): warning C4244: “参数”: 从“time_t”转换到“unsigned int”，可能丢失数据
+E:\gitProject\CPlusPlusLearn\Data structure and algorithm\AlgorithmCoding\AlgorithmCoding\SortTestHelper.h(42,13): warning C4244: “参数”: 从“time_t”转换到“unsigned int”，可能丢失数据
+E:\gitProject\CPlusPlusLearn\Data structure and algorithm\AlgorithmCoding\AlgorithmCoding\FileOps.h(16,25): warning C4018: “<”: 有符号/无符号不匹配
+E:\gitProject\CPlusPlusLearn\Data structure and algorithm\AlgorithmCoding\AlgorithmCoding\FileOps.h(30,21): warning C4018: “<”: 有符号/无符号不匹配
+E:\gitProject\CPlusPlusLearn\Data structure and algorithm\AlgorithmCoding\AlgorithmCoding\FileOps.h(62,29): warning C4018: “<=”: 有符号/无符号不匹配
+E:\gitProject\CPlusPlusLearn\Data structure and algorithm\AlgorithmCoding\AlgorithmCoding\UnionFind1.h(49,19): warning C4390: “;”: 找到空的受控语句；这是否是有意的?
+E:\gitProject\CPlusPlusLearn\Data structure and algorithm\AlgorithmCoding\AlgorithmCoding\UnionFindTestHelper.h(16,13): warning C4244: “参数”: 从“time_t”转换到“unsigned int”，可能丢失数据
+E:\gitProject\CPlusPlusLearn\Data structure and algorithm\AlgorithmCoding\AlgorithmCoding\UnionFindTestHelper.h(44,13): warning C4244: “参数”: 从“time_t”转换到“unsigned int”，可能丢失数据
+E:\gitProject\CPlusPlusLearn\Data structure and algorithm\AlgorithmCoding\AlgorithmCoding\UnionFindTestHelper.h(67,13): warning C4244: “参数”: 从“time_t”转换到“unsigned int”，可能丢失数据
+E:\gitProject\CPlusPlusLearn\Data structure and algorithm\AlgorithmCoding\AlgorithmCoding\main.cpp(18,12): warning C4244: “参数”: 从“time_t”转换到“unsigned int”，可能丢失数据
+  AlgorithmCoding.vcxproj -> E:\gitProject\CPlusPlusLearn\Data structure and algorithm\AlgorithmCoding\Debug\AlgorithmCoding.exe
