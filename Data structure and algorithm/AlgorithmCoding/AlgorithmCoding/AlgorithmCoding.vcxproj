@@ -128,11 +128,13 @@
   <ItemGroup>
     <ClInclude Include="binarysearch.h" />
     <ClInclude Include="BST.h" />
+    <ClInclude Include="DenseGraph.h" />
     <ClInclude Include="FileOps.h" />
     <ClInclude Include="heapsort.h" />
     <ClInclude Include="indexheap.h" />
     <ClInclude Include="maxheap.h" />
     <ClInclude Include="SortTestHelper.h" />
+    <ClInclude Include="SparseGraph.h" />
     <ClInclude Include="UnionFind1.h" />
     <ClInclude Include="UnionFind2.h" />
     <ClInclude Include="UnionFind3.h" />

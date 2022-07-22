@@ -22,6 +22,9 @@
     <Filter Include="头文件\unionFind">
       <UniqueIdentifier>{ae24aeca-3892-454f-a41a-8673e289e718}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\graph">
+      <UniqueIdentifier>{c2616d70-5bcb-4d37-95d6-f0f689f9cb2e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -67,6 +70,12 @@
     </ClInclude>
     <ClInclude Include="UnionFind5.h">
       <Filter>头文件\unionFind</Filter>
+    </ClInclude>
+    <ClInclude Include="DenseGraph.h">
+      <Filter>头文件\graph</Filter>
+    </ClInclude>
+    <ClInclude Include="SparseGraph.h">
+      <Filter>头文件\graph</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
