@@ -1,1 +1,27 @@
-﻿  AlgorithmCoding.vcxproj -> F:\paper\CPlusPlusLearn\Data structure and algorithm\AlgorithmCoding\Debug\AlgorithmCoding.exe
+﻿  main.cpp
+F:\paper\CPlusPlusLearn\Data structure and algorithm\AlgorithmCoding\AlgorithmCoding\SortTestHelper.h(25,13): warning C4244: “参数”: 从“time_t”转换到“unsigned int”，可能丢失数据
+F:\paper\CPlusPlusLearn\Data structure and algorithm\AlgorithmCoding\AlgorithmCoding\SortTestHelper.h(42,13): warning C4244: “参数”: 从“time_t”转换到“unsigned int”，可能丢失数据
+F:\paper\CPlusPlusLearn\Data structure and algorithm\AlgorithmCoding\AlgorithmCoding\FileOps.h(16,25): warning C4018: “<”: 有符号/无符号不匹配
+F:\paper\CPlusPlusLearn\Data structure and algorithm\AlgorithmCoding\AlgorithmCoding\FileOps.h(30,21): warning C4018: “<”: 有符号/无符号不匹配
+F:\paper\CPlusPlusLearn\Data structure and algorithm\AlgorithmCoding\AlgorithmCoding\FileOps.h(62,29): warning C4018: “<=”: 有符号/无符号不匹配
+F:\paper\CPlusPlusLearn\Data structure and algorithm\AlgorithmCoding\AlgorithmCoding\UnionFind1.h(49,19): warning C4390: “;”: 找到空的受控语句；这是否是有意的?
+F:\paper\CPlusPlusLearn\Data structure and algorithm\AlgorithmCoding\AlgorithmCoding\UnionFindTestHelper.h(18,13): warning C4244: “参数”: 从“time_t”转换到“unsigned int”，可能丢失数据
+F:\paper\CPlusPlusLearn\Data structure and algorithm\AlgorithmCoding\AlgorithmCoding\UnionFindTestHelper.h(46,13): warning C4244: “参数”: 从“time_t”转换到“unsigned int”，可能丢失数据
+F:\paper\CPlusPlusLearn\Data structure and algorithm\AlgorithmCoding\AlgorithmCoding\UnionFindTestHelper.h(69,13): warning C4244: “参数”: 从“time_t”转换到“unsigned int”，可能丢失数据
+F:\paper\CPlusPlusLearn\Data structure and algorithm\AlgorithmCoding\AlgorithmCoding\UnionFindTestHelper.h(92,13): warning C4244: “参数”: 从“time_t”转换到“unsigned int”，可能丢失数据
+F:\paper\CPlusPlusLearn\Data structure and algorithm\AlgorithmCoding\AlgorithmCoding\UnionFindTestHelper.h(115,13): warning C4244: “参数”: 从“time_t”转换到“unsigned int”，可能丢失数据
+F:\paper\CPlusPlusLearn\Data structure and algorithm\AlgorithmCoding\AlgorithmCoding\SparseGraph.h(68,21): warning C4018: “<”: 有符号/无符号不匹配
+F:\paper\CPlusPlusLearn\Data structure and algorithm\AlgorithmCoding\AlgorithmCoding\SparseGraph.h(84,22): warning C4018: “<”: 有符号/无符号不匹配
+F:\paper\CPlusPlusLearn\Data structure and algorithm\AlgorithmCoding\AlgorithmCoding\SparseGraph.h(120,14): warning C4018: “<”: 有符号/无符号不匹配
+F:\paper\CPlusPlusLearn\Data structure and algorithm\AlgorithmCoding\AlgorithmCoding\SparseGraph.h(129,17): warning C4018: “>=”: 有符号/无符号不匹配
+F:\paper\CPlusPlusLearn\Data structure and algorithm\AlgorithmCoding\AlgorithmCoding\main.cpp(23,12): warning C4244: “参数”: 从“time_t”转换到“unsigned int”，可能丢失数据
+F:\paper\CPlusPlusLearn\Data structure and algorithm\AlgorithmCoding\AlgorithmCoding\main.cpp(109,12): warning C4244: “参数”: 从“time_t”转换到“unsigned int”，可能丢失数据
+F:\paper\CPlusPlusLearn\Data structure and algorithm\AlgorithmCoding\AlgorithmCoding\ShortestPath.h(99,21): warning C4018: “<”: 有符号/无符号不匹配
+F:\paper\CPlusPlusLearn\Data structure and algorithm\AlgorithmCoding\AlgorithmCoding\ShortestPath.h(96): message : 在编译 类 模板 成员函数“void ShortestPath<SparseGraph>::showPath(int)”时
+F:\paper\CPlusPlusLearn\Data structure and algorithm\AlgorithmCoding\AlgorithmCoding\main.cpp(191): message : 查看对正在编译的函数 模板 实例化“void ShortestPath<SparseGraph>::showPath(int)”的引用
+F:\paper\CPlusPlusLearn\Data structure and algorithm\AlgorithmCoding\AlgorithmCoding\main.cpp(189): message : 查看对正在编译的 类 模板 实例化“ShortestPath<SparseGraph>”的引用
+F:\paper\CPlusPlusLearn\Data structure and algorithm\AlgorithmCoding\AlgorithmCoding\Path.h(93,21): warning C4018: “<”: 有符号/无符号不匹配
+F:\paper\CPlusPlusLearn\Data structure and algorithm\AlgorithmCoding\AlgorithmCoding\Path.h(90): message : 在编译 类 模板 成员函数“void Path<SparseGraph>::showPath(int)”时
+F:\paper\CPlusPlusLearn\Data structure and algorithm\AlgorithmCoding\AlgorithmCoding\main.cpp(174): message : 查看对正在编译的函数 模板 实例化“void Path<SparseGraph>::showPath(int)”的引用
+F:\paper\CPlusPlusLearn\Data structure and algorithm\AlgorithmCoding\AlgorithmCoding\main.cpp(172): message : 查看对正在编译的 类 模板 实例化“Path<SparseGraph>”的引用
+  AlgorithmCoding.vcxproj -> F:\paper\CPlusPlusLearn\Data structure and algorithm\AlgorithmCoding\Debug\AlgorithmCoding.exe

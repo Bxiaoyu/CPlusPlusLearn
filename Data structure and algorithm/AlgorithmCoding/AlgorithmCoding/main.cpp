@@ -4,6 +4,11 @@
 #include "BST.h"
 #include "FileOps.h"
 #include "UnionFindTestHelper.h"
+#include "ReadGraph.h"
+#include "SparseGraph.h"
+#include "DenseGraph.h"
+#include "Path.h"
+#include "ShortestPath.h"
 
 using namespace std;
 using namespace SortTestHelper;
@@ -96,11 +101,92 @@ void test_unionFind()
 	UnionFindTestHelper::testUF5(n);
 }
 
+void test_Graph()
+{
+	int N = 20;
+	int M = 100;
+
+	srand(time(NULL));
+
+
+	// Sparse Graph
+	SparseGraph g1(N, false);
+	for (int i = 0; i < M; i++) {
+		int a = rand() % N;
+		int b = rand() % N;
+		g1.addEdge(a, b);
+	}
+
+	// O(E)
+	for (int v = 0; v < N; v++) {
+		cout << v << " : ";
+		SparseGraph::adjIterator adj(g1, v);
+		for (int w = adj.begin(); !adj.end(); w = adj.next())
+			cout << w << " ";
+		cout << endl;
+	}
+
+	cout << endl;
+
+
+	// Dense Graph
+	DenseGraph g2(N, false);
+	for (int i = 0; i < M; i++) {
+		int a = rand() % N;
+		int b = rand() % N;
+		g2.addEdge(a, b);
+	}
+
+	// O(V^2)
+	for (int v = 0; v < N; v++) {
+		cout << v << " : ";
+		DenseGraph::adjIterator adj(g2, v);
+		for (int w = adj.begin(); !adj.end(); w = adj.next())
+			cout << w << " ";
+		cout << endl;
+	}
+}
+
+void test_readGraph()
+{
+	string filename = "testG1.txt";
+	SparseGraph g1(13, false);
+	ReadGraph<SparseGraph> readGraph1(g1, filename);
+	g1.show();
+
+	cout << endl;
+
+	DenseGraph g2(13, false);
+	ReadGraph<DenseGraph> readGraph2(g2, filename);
+	g2.show();
+}
+
+void test_shortestPathGraph()
+{
+	string filename = "C:\\Users\\sky\\Desktop\\coding-71-master\\coding-71\\07-Graph-Basics\\Course Code (C++)\\06-Finding-a-Path\\testG.txt";
+	SparseGraph g = SparseGraph(7, false);
+	ReadGraph<SparseGraph> readGraph(g, filename);
+	g.show();
+	cout << endl;
+
+	Path<SparseGraph> dfs(g, 0);
+	cout << "DFS: ";
+	dfs.showPath(6);
+
+	ShortestPath<SparseGraph> bfs(g, 0);
+	cout << "BFS: ";
+	bfs.showPath(6);
+}
+
+
 int main()
 {
 	//test_heap();
 	//test_heapSort();
 	//test_binarySearchTree();
-	test_unionFind();
+	//test_unionFind();
+	//test_Graph();
+	//test_readGraph();
+	test_shortestPathGraph();
 	return 0;
 }

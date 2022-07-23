@@ -25,6 +25,9 @@
     <Filter Include="头文件\graph">
       <UniqueIdentifier>{c2616d70-5bcb-4d37-95d6-f0f689f9cb2e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\minimumSpanTree">
+      <UniqueIdentifier>{38a8134d-2737-4eca-a25e-b0122170ed6a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -76,6 +79,21 @@
     </ClInclude>
     <ClInclude Include="SparseGraph.h">
       <Filter>头文件\graph</Filter>
+    </ClInclude>
+    <ClInclude Include="ReadGraph.h">
+      <Filter>头文件\graph</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>头文件\graph</Filter>
+    </ClInclude>
+    <ClInclude Include="Path.h">
+      <Filter>头文件\graph</Filter>
+    </ClInclude>
+    <ClInclude Include="ShortestPath.h">
+      <Filter>头文件\graph</Filter>
+    </ClInclude>
+    <ClInclude Include="Edge.h">
+      <Filter>头文件\minimumSpanTree</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
