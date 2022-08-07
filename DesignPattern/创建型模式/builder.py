@@ -6,19 +6,20 @@
     * 具体建造者(Concrete Builder)
     * 指挥者(Director)
     * 产品(Product)
-
+对比：建造者模式与抽象工厂模式相似，也用来创建复杂对象。主要区别是建造者模式着重
+     一步步构造一个复杂对象，而抽象工厂模式着重于多个系列的产品对象。
 优点：
-    * 每个具体产品都对应一个具体工厂类，不需要修改工厂类代码
-    * 隐藏了对象创建的实现细节
+    * 隐藏了一个产品的内部构造和装配过程
+    * 将构造代码与表示代码分开
+    * 可以对构造过程进行更精细的控制
 缺点：
-    * 每增加一个具体产品类，就必须增加一个相应的具体工厂类
+    
 """
 from abc import ABCMeta, abstractmethod
-from msilib.schema import SelfReg
 
 
 class Player:
-    def __init__(self, face, body, arm, leg) -> None:
+    def __init__(self, face=None, body=None, arm=None, leg=None) -> None:
         self.face = face
         self.body = body
         self.arm = arm
@@ -80,3 +81,24 @@ class MonsterBuilder(PlayerBuilder):
 
     def build_leg(self):
         self.player.leg = "长毛的腿"
+
+
+class PlayerDirector:  # 控制组装顺序
+    def build_player(self, builder):
+        builder.build_body()
+        builder.build_face()
+        builder.build_arm()
+        builder.build_leg()
+        return builder.player
+
+
+# client
+def main():
+    builder = SexyGirlBuilder()
+    director = PlayerDirector()
+    p = director.build_player(builder)
+    print(p)
+
+
+if __name__ == "__main__":
+    main()
