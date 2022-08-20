@@ -95,5 +95,20 @@
     <ClInclude Include="Edge.h">
       <Filter>头文件\minimumSpanTree</Filter>
     </ClInclude>
+    <ClInclude Include="MinimumSpawnTreeDenseGraph.h">
+      <Filter>头文件\minimumSpanTree</Filter>
+    </ClInclude>
+    <ClInclude Include="ReadMinimumSpawnTree.h">
+      <Filter>头文件\minimumSpanTree</Filter>
+    </ClInclude>
+    <ClInclude Include="MinimumSpawnTreeSparseGraph.h">
+      <Filter>头文件\minimumSpanTree</Filter>
+    </ClInclude>
+    <ClInclude Include="LazyPrimMST.h">
+      <Filter>头文件\minimumSpanTree</Filter>
+    </ClInclude>
+    <ClInclude Include="MinHeap.h">
+      <Filter>头文件\heapSort</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

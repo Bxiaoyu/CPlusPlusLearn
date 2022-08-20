@@ -1,3 +1,4 @@
+#include <iomanip>
 #include "maxheap.h"
 #include "heapsort.h"
 #include "SortTestHelper.h"
@@ -9,6 +10,10 @@
 #include "DenseGraph.h"
 #include "Path.h"
 #include "ShortestPath.h"
+#include "ReadMinimumSpawnTree.h"
+#include "MinimumSpawnTreeDenseGraph.h"
+#include "MinimumSpawnTreeSparseGraph.h"
+#include "LazyPrimMST.h"
 
 using namespace std;
 using namespace SortTestHelper;
@@ -178,6 +183,47 @@ void test_shortestPathGraph()
 	bfs.showPath(6);
 }
 
+void test_MinimumSpawnTree()
+{
+	string filename = "C:\\Users\\sky\\Desktop\\coding-71-master\\coding-71\\08-Minimum-Span-Trees\\Course Code (C++)\\01-Weighted-Graph\\testG1.txt";
+	int V = 8;
+	cout<<fixed<<setprecision(2);
+
+    // Test Weighted Dense Graph
+    SpawnTreeDenseGraph<double> g1 = SpawnTreeDenseGraph<double>(V, false);
+    ReadMinimumSpawnTreeGraph<SpawnTreeDenseGraph<double>,double> readGraph1(g1, filename);
+    g1.show();
+    cout<<endl;
+
+    // Test Weighted Sparse Graph
+    SpawnTreeSparseGraph<double> g2 = SpawnTreeSparseGraph<double>(V, false);
+	ReadMinimumSpawnTreeGraph<SpawnTreeSparseGraph<double>,double> readGraph2(g2, filename);
+    g2.show();
+    cout<<endl;
+}
+
+void test_LazyPrim()
+{
+	string filename = "C:\\Users\\sky\\Desktop\\coding-71-master\\coding-71\\08-Minimum-Span-Trees\\Course Code (C++)\\03-Lazy-Prim\\testG1.txt";
+	int V = 8;
+
+	// Test Weighted Sparse Graph
+	SpawnTreeSparseGraph<double> g2 = SpawnTreeSparseGraph<double>(V, false);
+	ReadMinimumSpawnTreeGraph<SpawnTreeSparseGraph<double>, double> readGraph2(g2, filename);
+
+	// Test Lazy Prim MST
+	cout << "Test Lazy Prim MST: " << endl;
+	LazyPrinmMST<SpawnTreeSparseGraph<double>, double> lazyPrimMST(g2);
+	vector<Edge<double>> mst = lazyPrimMST.mstEdges();
+	for (int i = 0; i < mst.size(); i++)
+	{
+		cout << mst[i] << endl;
+	}
+	cout << "The MST weight is: " << lazyPrimMST.result() << endl;
+
+	cout << endl;
+}
+
 
 int main()
 {
@@ -187,6 +233,8 @@ int main()
 	//test_unionFind();
 	//test_Graph();
 	//test_readGraph();
-	test_shortestPathGraph();
+	//test_shortestPathGraph();
+	//test_MinimumSpawnTree();
+	test_LazyPrim();
 	return 0;
 }
