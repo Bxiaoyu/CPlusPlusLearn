@@ -206,7 +206,46 @@ Cmake可以根据所在的操作系统生成相应类型的makefile
     add_executable(main ${SRC})
     ```
 
+* **check_symbol_exists - 查找相关文件（FILES）里面是否包含相关符号[SYMBOL]， 如果存在则设置VARIABLE 为1。**
+
+  * 语法：check_symbol_exists(<symbol> <files> <variable>)
+
+  * 注意：使用`check_symbol_exists宏需要在`CMake文件中包含CheckSymbolExists，即：
+
+    ```cmake
+    include(CheckSymbolExists)
+    ```
+
+  * 例子：
+
+    ```cmake
+    # 在CMake文件中包含CheckSymbolExists
+    include(CheckSymbolExists)
     
+    # Check for macro SEEK_SET
+    # 检查头文件stdio.h中是否有SEEK_SET宏，若有则定义HAVE_SEEK_SET缓存变量，固定值设置为1
+    check_symbol_exists(SEEK_SET "stdio.h" HAVE_SEEK_SET)
+    
+    # Check for function fopen
+    # 检查头文件stdio.h中是否有fopen函数，若有则定义HAVE_FOPEN缓存变量，固定值设置为1
+    check_symbol_exists(fopen "stdio.h" HAVE_FOPEN)
+    
+    # check epoll and add config.h for the macro compilation
+    include(CheckSymbolExists)
+    check_symbol_exists(epoll_create "sys/epoll.h" EPOLL_EXISTS)
+    if (EPOLL_EXISTS)
+        # Linux下设置为epoll
+        set(EPOLL_ENABLE 1 CACHE INTERNAL "enable epoll")
+    
+        # Linux下也设置为poll
+    #    # set(EPOLL_ENABLE "" CACHE INTERNAL "not enable epoll")
+    else ()
+        set(EPOLL_ENABLE "" CACHE INTERNAL "not enable epoll")
+    endif ()
+    ```
+
+    
+
 
 ### CMake常用变量
 
