@@ -1092,6 +1092,10 @@ sky@sky:~$ docker run -d -p 3310:3306 -v /home/mysql/conf:/etc/mysql/conf.d -v /
 4291b5a654071e992dbc4c1b0f1e8850237c1c39b000eb0a5860e90c4e21d74b
 sky@sky:~$ 
 
+# 注意：若是在CentOS下，因为Centos7安全Selinux禁止了一些安全权限，导致mysql和mariadb在进行挂载/var/lib/mysql的时候会提示如下信息：[mysqld: Can't read dir of '/etc/mysql/conf.d/' (Errcode: 13 - Permission denied)]
+# 解决方法：在docker run中加入 --privileged=true 给容器加上特定权限
+sky@sky:~$ docker run -d --privileged=true -p 3310:3306 -v /home/mysql/conf:/etc/mysql/conf.d -v /home/mysql/data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=123456 --name mysql01 mysql:5.7
+
 # 启动成功后，我们在本地使用数据库连接工具测试一下
 # 在本地测试创建一个数据库，查看一下我们映射的路径是否OK！
 ```
