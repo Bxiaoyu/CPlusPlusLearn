@@ -14,11 +14,15 @@
 #include "MinimumSpawnTreeDenseGraph.h"
 #include "MinimumSpawnTreeSparseGraph.h"
 #include "LazyPrimMST.h"
+#include "bubbleSort.h"
+#include "selectionSort.h"
 
 using namespace std;
 using namespace SortTestHelper;
 using namespace FileOps;
 using namespace UnionFindTestHelper;
+using namespace BubbleSort;
+using namespace SelectionSort;
 
 void test_heap()
 {
@@ -235,6 +239,8 @@ int main()
 	//test_readGraph();
 	//test_shortestPathGraph();
 	//test_MinimumSpawnTree();
-	test_LazyPrim();
+	//test_LazyPrim();
+	//BubbleSort::test_func();
+	SelectionSort::test_func();
 	return 0;
 }

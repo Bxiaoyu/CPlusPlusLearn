@@ -28,6 +28,9 @@
     <Filter Include="头文件\minimumSpanTree">
       <UniqueIdentifier>{38a8134d-2737-4eca-a25e-b0122170ed6a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\sortBasic">
+      <UniqueIdentifier>{d3bd9a45-a042-43f6-a966-0e822898d987}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -109,6 +112,12 @@
     </ClInclude>
     <ClInclude Include="MinHeap.h">
       <Filter>头文件\heapSort</Filter>
+    </ClInclude>
+    <ClInclude Include="bubbleSort.h">
+      <Filter>头文件\sortBasic</Filter>
+    </ClInclude>
+    <ClInclude Include="selectionSort.h">
+      <Filter>头文件\sortBasic</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
