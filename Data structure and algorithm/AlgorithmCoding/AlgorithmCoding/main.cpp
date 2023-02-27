@@ -16,6 +16,10 @@
 #include "LazyPrimMST.h"
 #include "bubbleSort.h"
 #include "selectionSort.h"
+#include "insertionSort.h"
+#include "shellSort.h"
+#include "mergeSort.h"
+#include "quickSort.h"
 
 using namespace std;
 using namespace SortTestHelper;
@@ -23,6 +27,10 @@ using namespace FileOps;
 using namespace UnionFindTestHelper;
 using namespace BubbleSort;
 using namespace SelectionSort;
+using namespace InsertionSort;
+using namespace ShellSort;
+using namespace MergeSort;
+using namespace QuickSort;
 
 void test_heap()
 {
@@ -241,6 +249,10 @@ int main()
 	//test_MinimumSpawnTree();
 	//test_LazyPrim();
 	//BubbleSort::test_func();
-	SelectionSort::test_func();
+	//SelectionSort::test_func();
+	//InsertionSort::test_func();
+	//ShellSort::test_func();
+	//MergeSort::test_func();
+	QuickSort::test_func();
 	return 0;
 }

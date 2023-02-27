@@ -31,6 +31,9 @@
     <Filter Include="头文件\sortBasic">
       <UniqueIdentifier>{d3bd9a45-a042-43f6-a966-0e822898d987}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\sortAdvance">
+      <UniqueIdentifier>{a1ed5e17-24bf-4a26-b0c9-f4020dea1c2e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -118,6 +121,18 @@
     </ClInclude>
     <ClInclude Include="selectionSort.h">
       <Filter>头文件\sortBasic</Filter>
+    </ClInclude>
+    <ClInclude Include="insertionSort.h">
+      <Filter>头文件\sortBasic</Filter>
+    </ClInclude>
+    <ClInclude Include="shellSort.h">
+      <Filter>头文件\sortBasic</Filter>
+    </ClInclude>
+    <ClInclude Include="mergeSort.h">
+      <Filter>头文件\sortAdvance</Filter>
+    </ClInclude>
+    <ClInclude Include="quickSort.h">
+      <Filter>头文件\sortAdvance</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
