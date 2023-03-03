@@ -134,5 +134,8 @@
     <ClInclude Include="quickSort.h">
       <Filter>头文件\sortAdvance</Filter>
     </ClInclude>
+    <ClInclude Include="bucketSort.h">
+      <Filter>头文件\sortAdvance</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

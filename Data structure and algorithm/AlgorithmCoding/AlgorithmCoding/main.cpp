@@ -20,6 +20,7 @@
 #include "shellSort.h"
 #include "mergeSort.h"
 #include "quickSort.h"
+#include "bucketSort.h"
 
 using namespace std;
 using namespace SortTestHelper;
@@ -31,6 +32,7 @@ using namespace InsertionSort;
 using namespace ShellSort;
 using namespace MergeSort;
 using namespace QuickSort;
+using namespace NPBucketSort;
 
 void test_heap()
 {
@@ -253,6 +255,7 @@ int main()
 	//InsertionSort::test_func();
 	//ShellSort::test_func();
 	//MergeSort::test_func();
-	QuickSort::test_func();
+	//QuickSort::test_func();
+	NPBucketSort::test_func();
 	return 0;
 }
