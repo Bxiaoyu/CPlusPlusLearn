@@ -214,7 +214,59 @@ namespace NPLinkList
 		}
 	};
 
+	/*!
+	 * @brief 合并两个有序链表
+	 * @tparam T 数据类型
+	 * @param  la 链表1
+	 * @param  lb 链表2
+	*/
+	template<typename T>
+	void mergeList(LinkList<T>& la, LinkList<T>& lb)
+	{
+		LNode<T>* pa = la.head->next, * pb = lb.head->next, *p;
+		p = la.head;
+
+		while (pa && pb)
+		{
+			if (pa->data <= pb->data)
+			{
+				p->next = pa;
+				p = pa;
+				pa = pa->next;
+			}
+			else
+			{
+				p->next = pb;
+				p = pb;
+				pb = pb->next;
+			}
+		}
+
+		p->next = pa ? pa : pb;  // 插入剩余段
+		lb.head->next = nullptr;  // lb表为空
+	}
+
 	// 测试
+	void merge_test()
+	{
+		LinkList<int> la, lb;
+		for (int i = 1; i <= 5; ++i)
+		{
+			la.ListInsert(i, i);
+			lb.ListInsert(i, i * 2);
+		}
+
+		cout << "la=";
+		la.ListTraverse(mprint<int>);
+		cout << "lb=";
+		lb.ListTraverse(mprint<int>);
+		mergeList(la, lb);
+		cout << "New la=";
+		la.ListTraverse(mprint<int>);
+		cout << "New lb=";
+		lb.ListTraverse(mprint<int>);
+	}
+
 	void test_func()
 	{
 		typedef int T;
@@ -292,6 +344,9 @@ namespace NPLinkList
 		list.ClearList();
 		cout << "清空表L后，L是否为空？" << boolalpha << list.ListEmpty() << "，表L的长度=" << list.ListLength() << "，表L的长度=" <<
 			list.ListLength2() << endl;
+
+		cout << endl;
+		merge_test();
 	}
 }
 
