@@ -3613,7 +3613,7 @@ public:
 void test_read_binary()
 {
 	// 1. 创建文件流对象
-	ifstream ifs("person.txt", ios::out | ios::binary);
+	ifstream ifs("person.txt", ios::in | ios::binary);
 
 	// 2.指定打开方式，打开方式两种，并判断文件是否打开成功
 	if (!ifs.is_open())

@@ -26,7 +26,7 @@ namespace QuickSort
 		// 选择第一个数值作为标定点pivot
 		T v = arr[l];
 		int j = l;  // arr[l+1...j] < v ; arr[j+1...i) > v
-		for (int i = l+1; i <= r; ++i)
+		for (int i = l + 1; i <= r; ++i)
 		{
 			if (arr[i] < v)
 			{
@@ -132,7 +132,7 @@ namespace QuickSort
 			}
 
 			// 注意这里的边界, arr[j] > v, 不能是arr[j] >= v
-			while (j >= l+1 && arr[j] > v)
+			while (j >= l + 1 && arr[j] > v)
 			{
 				j--;
 			}
@@ -203,7 +203,7 @@ namespace QuickSort
 		{
 			if (arr[i] < v)
 			{
-				swap(arr[i], arr[lt+1]);
+				swap(arr[i], arr[lt + 1]);
 				i++;
 				lt++;
 			}
@@ -231,7 +231,6 @@ namespace QuickSort
 		__quickSort3Way(arr, 0, n - 1);
 	}
 	//////////////////////////////////////////////////////////////////////////////////////
-
 
 	// 测试
 	void test_func()

@@ -36,6 +36,9 @@
     <ClInclude Include="helper.h">
       <Filter>头文件\common</Filter>
     </ClInclude>
+    <ClInclude Include="LinkListCy.h">
+      <Filter>头文件\linearList</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

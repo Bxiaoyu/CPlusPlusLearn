@@ -143,6 +143,7 @@
     <ClInclude Include="C.h" />
     <ClInclude Include="helper.h" />
     <ClInclude Include="LinkList.h" />
+    <ClInclude Include="LinkListCy.h" />
     <ClInclude Include="SqList.h" />
   </ItemGroup>
   <ItemGroup>
