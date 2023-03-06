@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClInclude Include="AList.h" />
     <ClInclude Include="C.h" />
+    <ClInclude Include="DLinkList.h" />
     <ClInclude Include="helper.h" />
     <ClInclude Include="LinkList.h" />
     <ClInclude Include="LinkListCy.h" />

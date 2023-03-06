@@ -27,7 +27,7 @@ namespace NPLinkListCy
 	class LinkListCy : public AList<T>
 	{
 		template<typename T>
-		friend mergeList(LinkListCy<T>&, LinkListCy<T>&);
+		friend void mergeList(LinkListCy<T>&, LinkListCy<T>&);
 
 	private:
 		LNode<T>* tail;  // 表尾
@@ -169,13 +169,85 @@ namespace NPLinkListCy
 			s->data = e;
 			s->next = p->next;
 			p->next = s;
-			if (p == tail)
+			if (p == tail)  // 插在表尾
 			{
 				tail = s;
 			}
 			return true;
 		}
+
+		bool ListDelete(int i, T& e)
+		{
+			int j = 0;
+			LNode<T>* q, * p = tail->next;
+			if (i <= 0 || i > ListLength())
+			{
+				return false;
+			}
+
+			while (j < i-1)
+			{
+				j++;
+				p = p->next;
+			}
+			q = p->next;
+			p->next = q->next;
+			e = q->data;
+			if (tail == q)  // 删除的是表尾元素
+			{
+				tail = p;
+			}
+			delete q;
+			return true;
+		}
+
+		void ListTraverse(void(*visit) (T*)) const
+		{
+			LNode<T>* p = tail->next->next;  // 指向第一个结点
+			while (p != tail->next)  // p不指向头结点
+			{
+				visit(&p->data);
+				p = p->next;
+			}
+
+			cout << endl;
+		}
 	};
+
+	template<typename T>
+	void mergeList(LinkListCy<T>& la, LinkListCy<T>& lb)
+	{
+		LNode<T>* p = lb.tail->next;  // 将lb合并到la的表尾，由la指示新表，lb成空表
+		lb.tail->next = la.tail->next;  // lb的尾指针指向la的头结点
+		la.tail->next = p->next;  // la的尾结点的next域指向lb的第一个结点
+		la.tail = lb.tail;  // lb的尾结点成为la的尾结点
+		lb.tail = p;
+		lb.tail->next = lb.tail;  // lb表为空
+	}
+
+	// 测试
+	void test_merge()
+	{
+		LinkListCy<int> la, lb;
+		for (int i = 1; i <= 3; ++i)
+		{
+			la.ListInsert(i, i);
+			lb.ListInsert(i, i + 3);
+		}
+
+		cout << "la=";
+		la.ListTraverse(mprint<int>);
+		cout << "lb=";
+		lb.ListTraverse(mprint<int>);
+		mergeList(la, lb);
+		cout << "New la=";
+		la.ListTraverse(mprint<int>);
+	}
+
+	void test_func()
+	{
+		test_merge();
+	}
 }
 
 #endif
