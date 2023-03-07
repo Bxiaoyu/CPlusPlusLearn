@@ -1,8 +1,11 @@
 #pragma once
 #ifndef _DLINKLIST_H_
 #define _DLINKLIST_H_
+#include <iostream>
 #include "AList.h"
 #include "helper.h"
+
+using namespace std;
 
 namespace NPDLinkList
 {
@@ -43,15 +46,15 @@ namespace NPDLinkList
 				return p;  // 返回头结点
 			}
 
-			while (j < i && p != head)
+			do 
 			{
-				j++;
 				p = p->next;
-			}
+				j++;
+			} while (j < i && p != head);  // p没返回到头结点且还没到第i个结点
 
 			if (p == head)  // 不存在
 			{
-				return nullptr
+				return nullptr;
 			}
 			else
 			{
@@ -175,7 +178,122 @@ namespace NPDLinkList
 			}
 			return false;
 		}
+
+		bool ListInsert(int i, T e)
+		{
+			DLNode<T>* p = GetElemP(i-1), *s;
+			if (p == nullptr)  // 第i个结点的前驱不存在
+			{
+				return false;
+			}
+			s = new DLNode<T>;
+			if (s == nullptr)
+			{
+				return false;
+			}
+			s->data = e;
+			s->prior = p;
+			s->next = p->next;
+			p->next->prior = s;
+			p->next = s;
+			return true;
+		}
+
+		bool ListDelete(int i, T& e) const
+		{
+			DLNode<T>* p = GetElemP(i);
+			if (i <= 0 || p == nullptr)
+			{
+				return false;
+			}
+			e = p->data;
+			p->prior->next = p->next;
+			p->next->prior = p->prior;
+			delete p;
+			return true;
+		}
+
+		void ListTraverse(void(*visit) (T*)) const
+		{
+			DLNode<T>* p = head->next;
+			while (p != head)
+			{
+				visit(&p->data);
+				p = p->next;
+			}
+			cout << endl;
+		}
+
+		void ListBackTraverse(void(*visit) (T*)) const
+		{
+			DLNode<T>* p = head->prior;
+			while (p != head)
+			{
+				visit(&p->data);
+				p = p->prior;
+			}
+			cout << endl;
+		}
 	};
+
+	// 测试
+	void test_func()
+	{
+		DLinkList<int> list;
+		int i, n = 4;
+		bool j;
+		int e;
+		for (i = 1; i <= 5; ++i)
+		{
+			list.ListInsert(i, i);
+		}
+		cout << "在表尾依次插入1-5后，l=";
+		list.ListTraverse(mprint<int>);
+		j = list.GetElem(2, e);
+		if (j)
+		{
+			cout << "链表的第二个元素值为" << e << endl;
+		}
+		else
+		{
+			cout << "不存在第2个元素" << endl;
+		}
+		i = list.LocateElem(n, equal);
+		if (i)
+		{
+			cout << "等于" << n << "的元素是第" << i << "个" << endl;
+		}
+		else
+		{
+			cout << "没有等于" << n << "的元素" << endl;
+		}
+		j = list.PriorElem(n, equal, e);
+		if (j)
+		{
+			cout << n << "的前驱是" << e << endl;
+		}
+		else
+		{
+			cout << "不存在" << n << "的前驱" << endl;
+		}
+		j = list.NextElem(n, equal, e);
+		if (j)
+		{
+			cout << n << "的后继是" << e << endl;
+		}
+		else
+		{
+			cout << "不存在" << n << "的后继" << endl;
+		}
+
+		list.ListDelete(2, e);
+		cout << "删除第2个结点，值为" << e << "，逆序输出其余结点：";
+		list.ListBackTraverse(mprint<int>);
+		cout << "链表的元素个数为" << list.ListLength() << "，";
+		cout << "链表是否为空？" << boolalpha << list.ListEmpty() << endl;
+		list.ClearList();
+		cout << "清空后，链表是否为空？" << boolalpha << list.ListEmpty() << endl;
+	}
 }
 
 #endif

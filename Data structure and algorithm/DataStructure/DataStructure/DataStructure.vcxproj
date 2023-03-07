@@ -142,9 +142,11 @@
     <ClInclude Include="AList.h" />
     <ClInclude Include="C.h" />
     <ClInclude Include="DLinkList.h" />
+    <ClInclude Include="DLinkListNH.h" />
     <ClInclude Include="helper.h" />
     <ClInclude Include="LinkList.h" />
     <ClInclude Include="LinkListCy.h" />
+    <ClInclude Include="LinkListNH.h" />
     <ClInclude Include="SqList.h" />
   </ItemGroup>
   <ItemGroup>
