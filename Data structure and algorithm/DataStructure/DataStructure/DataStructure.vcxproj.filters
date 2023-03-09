@@ -48,6 +48,9 @@
     <ClInclude Include="DLinkListNH.h">
       <Filter>头文件\linearList</Filter>
     </ClInclude>
+    <ClInclude Include="StLinkList.h">
+      <Filter>头文件\linearList</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

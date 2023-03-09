@@ -242,6 +242,36 @@ namespace NPDLinkListNH
 	};
 
 	// 测试
+
+	/*!
+	 * @brief 约瑟夫环问题（不设头结点的循环链表解决起来比较方便）
+	 * @param n 参与人数
+	 * @param m 出队报数
+	*/
+	void Joseph(int n, int m)
+	{
+		DLinkListNH<int> list;
+		int i;
+		int e;
+		for (i = 1; i <= n; ++i)
+		{
+			list.ListInsert(i, i);
+		}
+		do
+		{
+			for (i = 1; i < m; ++i)  // 顺序移动头指针m-1次
+			{
+				list.head = list.head->next;
+			}
+			list.ListDelete(1, e);
+			cout << setw(3) << e;
+		} while (list.ListLength());
+		cout << endl;
+	}
+
+	/*!
+	 * @brief 测试函数
+	*/
 	void test_func()
 	{
 		DLinkListNH<int> list;
@@ -270,7 +300,9 @@ namespace NPDLinkListNH
 		cout << "删除3个元素后，L=";
 		list.ListTraverse(mprint<int>);
 		list.ClearList();
-		cout << "清空表L后，表L的长度=" << list.ListLength() << endl;
+		cout << "清空表L后，表L的长度=" << list.ListLength() << endl << endl;
+		cout << "约瑟夫环问题（小孩人数8，出队报数5）：\n";
+		Joseph(8, 5);
 	}
 }
 

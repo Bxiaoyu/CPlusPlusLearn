@@ -148,6 +148,7 @@
     <ClInclude Include="LinkListCy.h" />
     <ClInclude Include="LinkListNH.h" />
     <ClInclude Include="SqList.h" />
+    <ClInclude Include="StLinkList.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
