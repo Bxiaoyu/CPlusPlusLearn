@@ -1,11 +1,18 @@
 #pragma once
 #ifndef _STLINKLIST_H_
 #define _STLINKLIST_H_
+#include "C.h"
+#include "helper.h"
+
 
 const int MAX_SIZE = 10;  // 静态链表的最大长度（根据实际应用设计）
 
 namespace NPSTLinkList
 {
+	/*!
+	 * @brief 静态链表类，存储于数组中（此数据结构在赫夫曼树和内部排序中有应用）
+	 * @tparam T 数据类型
+	*/
 	template<typename T>
 	class StLinkList
 	{
@@ -138,8 +145,95 @@ namespace NPSTLinkList
 
 		bool ListDelete(int i, T& e)
 		{
+			int m, k = 0;
+			for (m = 1; m < i; ++m)  // k向后移动i-1个结点，使k指示第i-1个结点
+			{
+				k = SL[k].link;
+				if (k == 0)
+				{
+					break;
+				}
+			}
+			if (m < i || SL[k].link == 0)  // 表中没有第i-1个结点或者没有第i个结点
+			{
+				return false;
+			}
+			else
+			{
+				m = SL[k].link;
+				SL[k].link = SL[m].link;
+				e = SL[m].data;
+				DELETE(m);
+				return true;
+			}
+		}
+
+		void ListTraverse(void(*visit)(T*))
+		{
+			int i = SL[0].link;
+			while (i)
+			{
+				visit(&SL[i].data);
+				i = SL[i].link;
+			}
+			cout << endl;
 		}
 	};
+
+	// 测试
+	void test_func()
+	{
+		StLinkList<int> list;
+		int e, e0 = 3;
+		bool i;
+		int j, k;
+		for (j = 1; j <= 5; ++j)
+		{
+			i = list.ListInsert(j, j);
+		}
+		cout << "在L的表尾依次插入1-5后，L=";
+		list.ListTraverse(mprint<int>);
+		cout << "L是否为空？" << boolalpha << list.ListEmpty() << "，表L的长度=";
+		cout << list.ListLength() << endl;
+		i = list.PriorElem(e0, equal, e);
+		if (i)
+		{
+			cout << "元素" << e0 << "的前驱为" << e << endl;
+		}
+		else
+		{
+			cout << "元素" << e0 << "无前驱，";
+		}
+		i = list.NextElem(e0, equal, e);
+		if (i)
+		{
+			cout << "元素" << e0 << "的后继为" << e << endl;
+		}
+		else
+		{
+			cout << "元素" << e0 << "无后继，";
+		}
+		k = list.ListLength();
+		for (j = k+1; j >= k; j--)
+		{
+			i = list.ListDelete(j, e);
+			if (i)
+			{
+				cout << "删除第" << j << "个元素成功，其值为" << e << endl;
+			}
+			else
+			{
+				cout << "删除第" << j << "个元素失败（不存在此元素），";
+			}
+		}
+		cout << "依次输出L的元素：";
+		list.ListTraverse(mprint<int>);
+		list.ClearList();
+		cout << "清空L后，L=";
+		list.ListTraverse(mprint<int>);
+		cout << "L是否为空？" << boolalpha << list.ListEmpty() << "，表L的长度=";
+		cout << list.ListLength() << endl;
+	}
 }
 
 #endif

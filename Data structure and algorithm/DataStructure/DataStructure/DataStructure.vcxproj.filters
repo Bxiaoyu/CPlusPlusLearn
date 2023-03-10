@@ -19,6 +19,9 @@
     <Filter Include="头文件\linearList">
       <UniqueIdentifier>{d03c9834-8f4c-4806-99d4-796abf1e349c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\stackAndQueue">
+      <UniqueIdentifier>{6797e8af-188b-43ea-adf2-a06bbfd19222}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="C.h">
@@ -50,6 +53,15 @@
     </ClInclude>
     <ClInclude Include="StLinkList.h">
       <Filter>头文件\linearList</Filter>
+    </ClInclude>
+    <ClInclude Include="AStack.h">
+      <Filter>头文件\stackAndQueue</Filter>
+    </ClInclude>
+    <ClInclude Include="SqStack.h">
+      <Filter>头文件\stackAndQueue</Filter>
+    </ClInclude>
+    <ClInclude Include="DLinkStack.h">
+      <Filter>头文件\stackAndQueue</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -140,14 +140,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AList.h" />
+    <ClInclude Include="AStack.h" />
     <ClInclude Include="C.h" />
     <ClInclude Include="DLinkList.h" />
     <ClInclude Include="DLinkListNH.h" />
+    <ClInclude Include="DLinkStack.h" />
     <ClInclude Include="helper.h" />
     <ClInclude Include="LinkList.h" />
     <ClInclude Include="LinkListCy.h" />
     <ClInclude Include="LinkListNH.h" />
     <ClInclude Include="SqList.h" />
+    <ClInclude Include="SqStack.h" />
     <ClInclude Include="StLinkList.h" />
   </ItemGroup>
   <ItemGroup>
