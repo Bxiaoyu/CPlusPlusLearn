@@ -63,6 +63,12 @@
     <ClInclude Include="DLinkStack.h">
       <Filter>头文件\stackAndQueue</Filter>
     </ClInclude>
+    <ClInclude Include="AQueue.h">
+      <Filter>头文件\stackAndQueue</Filter>
+    </ClInclude>
+    <ClInclude Include="LinkQueue.h">
+      <Filter>头文件\stackAndQueue</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
