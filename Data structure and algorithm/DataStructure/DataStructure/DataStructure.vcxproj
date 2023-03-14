@@ -152,6 +152,7 @@
     <ClInclude Include="LinkListNH.h" />
     <ClInclude Include="LinkQueue.h" />
     <ClInclude Include="SqList.h" />
+    <ClInclude Include="SqQueueCy.h" />
     <ClInclude Include="SqStack.h" />
     <ClInclude Include="StLinkList.h" />
   </ItemGroup>

@@ -8,7 +8,7 @@
 #include "StLinkList.h"
 #include "SqStack.h"
 #include "DLinkStack.h"
-#include "LinkQueue.h"
+//#include "LinkQueue.h"
 
 using namespace std;
 using namespace NPSqList;
@@ -20,7 +20,7 @@ using namespace NPDLinkListNH;
 using namespace NPSTLinkList;
 using namespace NPSQSTACK;
 using namespace NPDLinkStack;
-using namespace NPLinkQueue;
+//using namespace NPLinkQueue;
 
 int main(int argc, char* argv[])
 {
@@ -33,6 +33,6 @@ int main(int argc, char* argv[])
 	//NPSTLinkList::test_func();
 	//NPSQSTACK::test_func();
 	//NPDLinkStack::test_func();
-	NPLinkQueue::test_func();
+	//NPLinkQueue::test_func();
 	return 0;
 }
