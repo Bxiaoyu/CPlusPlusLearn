@@ -3,12 +3,13 @@
 #define _SQQUEUECY_H_
 #include "C.h"
 #include "AQueue.h"
+#include "helper.h"
 
 
 namespace NPSqQueueCy
 {
 	/*!
-	 * @brief 队列的顺序存储结构
+	 * @brief 队列的顺序存储结构，形成循环，是一种很实用的队列
 	 * @tparam T 数据类型
 	*/
 	template<typename T>
@@ -33,23 +34,23 @@ namespace NPSqQueueCy
 			delete[] base;
 		}
 
-		void clearQueue()
+		void ClearQueue()
 		{
 			front = rear = 0;
 		}
 
-		bool queueEmpty() const
+		bool QueueEmpty() const
 		{
 			return front == rear;
 		}
 
-		int queueLength() const
+		int QueueLength() const
 		{
 			// +queuesize确保在rear<front时返回非负值，%queuesize确保返回值小于queuesize
 			return (rear - front + queuesize) % queuesize;
 		}
 
-		bool getHead(T& e) const
+		bool GetHead(T& e) const
 		{
 			if (front == rear)  // 队列空
 			{
@@ -59,7 +60,7 @@ namespace NPSqQueueCy
 			return true;
 		}
 
-		bool enQueue(T e)
+		bool EnQueue(T e)
 		{
 			T* newBase;
 			int i;
@@ -72,7 +73,7 @@ namespace NPSqQueueCy
 				}
 				for (i = 0; i < queuesize - 1; ++i)  // 将原队列元素复制到新队列
 				{
-					*(newBase + i) = *(base + (front + i) % queuesize)
+					*(newBase + i) = *(base + (front + i) % queuesize);
 				}
 				delete[] base;
 				base = newBase;
@@ -85,7 +86,7 @@ namespace NPSqQueueCy
 			return true;
 		}
 
-		bool deQueue(T& e)
+		bool DeQueue(T& e)
 		{
 			if (front == rear)
 			{
@@ -96,7 +97,7 @@ namespace NPSqQueueCy
 			return true;
 		}
 
-		void queueTraverse(void(*visit)(T*)) const
+		void QueueTraverse(void(*visit)(T*)) const
 		{
 			int i = front;
 			while (i != rear)
@@ -107,6 +108,88 @@ namespace NPSqQueueCy
 			cout << endl;
 		}
 	};
+
+	template<typename T>
+	class SqQueue
+	{
+	private:
+		T* base;  // 初始化的动态分配存储空间
+		int rear;  // 尾指针
+		int queuesize;  // 当前分配的存储空间
+	public:
+		SqQueue(int k = 1)
+		{
+			base = new T[k];
+			assert(base != nullptr);
+			rear = 0;
+			queuesize = k;
+		}
+
+		~SqQueue()
+		{
+			delete[] base;
+		}
+
+		bool EnQueue(T e)
+		{
+			if (rear == queuesize)
+			{
+				return false;
+			}
+			*(base + rear++) = e;
+			return true;
+		}
+
+		bool DeQueue(T& e)
+		{
+			if (rear == 0)  // 队空
+			{
+				return false;
+			}
+			e = *base;  // 队头元素赋给e
+			for (int i = 1; i < rear; ++i)
+			{
+				*(base + i - 1) = *(base + i);  // 依次前移队列元素
+			}
+			rear--;  // 尾指针前移
+			return true;
+		}
+
+		void QueueTraverse(void(*visit)(T*)) const
+		{
+			for (int i = 0; i < rear; ++i)
+			{
+				visit(base + i);
+			}
+			cout << endl;
+		}
+	};
+
+	// 测试
+	void test_func()
+	{
+		bool i;
+		int d;
+		SqQueueCy<int> q{ 3 };
+		for (int k = 0; k < 5; ++k)
+		{
+			assert(q.EnQueue(k));
+		}
+		cout << "入队5个元素后，队列的元素依次为：";
+		q.QueueTraverse(mprint<int>);
+		cout << "队列是否为空？" << boolalpha << q.QueueEmpty();
+		cout << "。队列的长度为：" << q.QueueLength() << endl;
+		q.DeQueue(d);
+		cout << "出队了队头元素，其值为：" << d;
+		i = q.GetHead(d);
+		if (i)
+		{
+			cout << "。新的队头元素是" << d << endl;
+		}
+		q.ClearQueue();
+		cout << "清空队列后，是否空队列？" << boolalpha << q.QueueEmpty();
+		cout << "。队列的长度为：" << q.QueueLength() << endl;
+	}
 }
 
 #endif
