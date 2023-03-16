@@ -109,6 +109,10 @@ namespace NPSqQueueCy
 		}
 	};
 
+	/*!
+	 * @brief 非循环队列，出队队头元素的时候，需要移动后面的元素，数据量大的时候时间开销很惊人
+	 * @tparam T 数据类型
+	*/
 	template<typename T>
 	class SqQueue
 	{
@@ -158,6 +162,50 @@ namespace NPSqQueueCy
 		void QueueTraverse(void(*visit)(T*)) const
 		{
 			for (int i = 0; i < rear; ++i)
+			{
+				visit(base + i);
+			}
+			cout << endl;
+		}
+	};
+
+	template<typename T>
+	class SqQueueNM : public SqQueueCy<T>
+	{
+	public:
+		SqQueueNM(int k) : SqQueueCy<T>(k)
+		{
+			// 构造函数，调用基类的有参构造函数
+		}
+
+		bool EnQueue(T e)
+		{
+			if (rear == queuesize)
+			{
+				return false;
+			}
+			*(base + rear++) = e;
+			return true;
+		}
+
+		bool DeQueue(T& e)
+		{
+			if (front == rear)
+			{
+				return false;
+			}
+			e = *(base + front++);
+			return true;
+		}
+
+		int QueueLength() const
+		{
+			return rear - front;
+		}
+
+		void QueueTraverse(void(*visit)(T*)) const
+		{
+			for (int i = front; i < rear; ++i)
 			{
 				visit(base + i);
 			}
