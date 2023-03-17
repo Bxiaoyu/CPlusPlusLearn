@@ -147,6 +147,7 @@
     <ClInclude Include="DLinkListNH.h" />
     <ClInclude Include="DLinkStack.h" />
     <ClInclude Include="helper.h" />
+    <ClInclude Include="HString.h" />
     <ClInclude Include="LinkList.h" />
     <ClInclude Include="LinkListCy.h" />
     <ClInclude Include="LinkListNH.h" />

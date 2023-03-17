@@ -22,6 +22,9 @@
     <Filter Include="头文件\stackAndQueue">
       <UniqueIdentifier>{6797e8af-188b-43ea-adf2-a06bbfd19222}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\stringAndMatrix">
+      <UniqueIdentifier>{f82e36c8-7110-48d3-a787-13a612101c80}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="C.h">
@@ -71,6 +74,9 @@
     </ClInclude>
     <ClInclude Include="SqQueueCy.h">
       <Filter>头文件\stackAndQueue</Filter>
+    </ClInclude>
+    <ClInclude Include="HString.h">
+      <Filter>头文件\stringAndMatrix</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
