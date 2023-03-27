@@ -78,6 +78,9 @@
     <ClInclude Include="HString.h">
       <Filter>头文件\stringAndMatrix</Filter>
     </ClInclude>
+    <ClInclude Include="MuArray.h">
+      <Filter>头文件\stringAndMatrix</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
