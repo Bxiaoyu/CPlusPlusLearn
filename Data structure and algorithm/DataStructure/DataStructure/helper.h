@@ -20,4 +20,22 @@ inline void mprint(T* c)
 	std::cout << *c << " ";
 }
 
+template<typename T>
+void InputFromFile(ifstream& f, T& e)
+{
+	f >> e;
+}
+
+template<typename T>
+void Input(T& e)
+{
+	cin >> e;
+}
+
+template<typename T>
+void Visit(const T& e)
+{
+	cout << e << ' ';
+}
+
 #endif

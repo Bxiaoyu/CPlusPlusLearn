@@ -25,6 +25,9 @@
     <Filter Include="头文件\stringAndMatrix">
       <UniqueIdentifier>{f82e36c8-7110-48d3-a787-13a612101c80}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\TreeAndBinaryTree">
+      <UniqueIdentifier>{7521d727-68c1-4a61-adb9-530a161d68a1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="C.h">
@@ -80,6 +83,12 @@
     </ClInclude>
     <ClInclude Include="MuArray.h">
       <Filter>头文件\stringAndMatrix</Filter>
+    </ClInclude>
+    <ClInclude Include="BiTNode.h">
+      <Filter>头文件\TreeAndBinaryTree</Filter>
+    </ClInclude>
+    <ClInclude Include="BiTree.h">
+      <Filter>头文件\TreeAndBinaryTree</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

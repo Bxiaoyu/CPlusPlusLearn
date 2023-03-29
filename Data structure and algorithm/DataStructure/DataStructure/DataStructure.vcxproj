@@ -142,6 +142,8 @@
     <ClInclude Include="AList.h" />
     <ClInclude Include="AQueue.h" />
     <ClInclude Include="AStack.h" />
+    <ClInclude Include="BiTNode.h" />
+    <ClInclude Include="BiTree.h" />
     <ClInclude Include="C.h" />
     <ClInclude Include="DLinkList.h" />
     <ClInclude Include="DLinkListNH.h" />
