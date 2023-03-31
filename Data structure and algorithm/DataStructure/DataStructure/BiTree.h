@@ -306,6 +306,64 @@ public:
 	{
 		queue<BiTNode<T>*> q;
 		BiTNode<T>* a;
+		if (root != nullptr)
+		{
+			q.push(root);
+			while (!q.empty())
+			{
+				a = q.front();
+				q.pop();
+				if (a->lchild && a->lchild == p || a->rchild && a->rchild == p)
+				{
+					return a;
+				}
+				else
+				{
+					if (a->lchild != nullptr)
+					{
+						q.push(a->lchild);
+					}
+					if (a->rchild != nullptr)
+					{
+						q.push(a->rchild);
+					}
+				}
+			}
+		}
+		return nullptr;
+	}
+
+	void Child(BiTNode<T>* p, BiTNode<T>*& left, BiTNode<T>*& right) const
+	{
+		left = p->lchild;
+		right = p->rchild;
+	}
+
+	bool Sibling(BiTNode<T>* p, BiTNode<T>*& sib, bool& LR) const
+	{
+		BiTNode<T>* q = Parent(p);
+		if (q == nullptr)
+		{
+			return false;
+		}
+		if (q->lchild == p)
+		{
+			sib = q->rchild;
+			LR = true;
+		}
+		else
+		{
+			sib = q->lchild;
+			LR = false;
+		}
+		if (sib != nullptr)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 };
 
